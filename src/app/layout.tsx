@@ -24,8 +24,8 @@ const bowlby = Bowlby_One_SC({
 });
 
 export const metadata = {
-  title: "Test Fonts",
-  description: "Verificando fuentes",
+  title: "VirtualVent",
+  description: "Tienda para el comercio electronico",
 };
 
 export default function RootLayout({

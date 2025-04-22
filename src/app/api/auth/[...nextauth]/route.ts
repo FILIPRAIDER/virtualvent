@@ -1,5 +1,6 @@
+// /api/auth/[...nextauth].ts
+import { authConfig } from "@/auth.config";
 import NextAuth from "next-auth";
-import { authConfig } from "@/auth.config"; // asegúrate que la ruta esté bien
 
 const handler = NextAuth(authConfig);
 

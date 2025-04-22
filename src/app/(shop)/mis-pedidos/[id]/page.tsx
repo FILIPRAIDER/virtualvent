@@ -1,4 +1,4 @@
-export default function ProductPage() {
+export default function PedidoPage() {
   return (
     <div>
       <h1>Hello Page</h1>

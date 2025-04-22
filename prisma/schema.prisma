@@ -164,19 +164,21 @@ model password_reset_tokens {
 }
 
 model productos {
-  id             BigInt       @id @default(autoincrement()) @db.UnsignedBigInt
-  nombre         String       @db.VarChar(255)
-  descripcion    String       @db.Text
-  stock          Int
-  precio         Decimal      @db.Decimal(10, 2)
-  categoria_id   BigInt       @db.UnsignedBigInt
-  corporativo_id BigInt       @db.UnsignedBigInt
-  created_at     DateTime?    @db.Timestamp(0)
-  updated_at     DateTime?    @db.Timestamp(0)
-  deleted_at     DateTime?    @db.Timestamp(0)
-  imagenes       imagenes[]
-  categorias     categorias   @relation(fields: [categoria_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "productos_categoria_id_foreign")
-  corporativos   corporativos @relation(fields: [corporativo_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "productos_corporativo_id_foreign")
+  id                     BigInt                   @id @default(autoincrement()) @db.UnsignedBigInt
+  nombre                 String                   @db.VarChar(255)
+  descripcion            String                   @db.Text
+  stock                  Int
+  precio                 Decimal                  @db.Decimal(10, 2)
+  categoria_id           BigInt                   @db.UnsignedBigInt
+  corporativo_id         BigInt                   @db.UnsignedBigInt
+  created_at             DateTime?                @db.Timestamp(0)
+  updated_at             DateTime?                @db.Timestamp(0)
+  deleted_at             DateTime?                @db.Timestamp(0)
+  imagenes               imagenes[]
+  item_orden             item_orden[]
+  movimientos_inventario movimientos_inventario[]
+  categorias             categorias               @relation(fields: [categoria_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "productos_categoria_id_foreign")
+  corporativos           corporativos             @relation(fields: [corporativo_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "productos_corporativo_id_foreign")
 
   @@index([categoria_id], map: "productos_categoria_id_foreign")
   @@index([corporativo_id], map: "productos_corporativo_id_foreign")
@@ -220,4 +222,70 @@ model users {
   tipousuarios      tipousuarios?  @relation(fields: [tipousuario_id], references: [id], onUpdate: NoAction, map: "users_tipousuario_id_foreign")
 
   @@index([tipousuario_id], map: "users_tipousuario_id_foreign")
+}
+
+model hoja_costos {
+  id             BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  nombre         String    @db.VarChar(255)
+  cantidad       Int       @db.UnsignedInt
+  margen         Decimal   @db.Decimal(6, 2)
+  materiales     Json
+  labores        Json
+  indirectos     Json
+  costo_total    Decimal   @default(0.00) @db.Decimal(10, 2)
+  costo_unitario Decimal   @default(0.0000) @db.Decimal(10, 4)
+  created_at     DateTime? @db.Timestamp(0)
+  updated_at     DateTime? @db.Timestamp(0)
+}
+
+model item_orden {
+  id          BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  cantidad    Int
+  precio      Decimal   @db.Decimal(10, 2)
+  producto_id BigInt    @db.UnsignedBigInt
+  orden_id    BigInt    @db.UnsignedBigInt
+  created_at  DateTime? @db.Timestamp(0)
+  updated_at  DateTime? @db.Timestamp(0)
+  ordenes     ordenes   @relation(fields: [orden_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "item_orden_orden_id_foreign")
+  productos   productos @relation(fields: [producto_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "item_orden_producto_id_foreign")
+
+  @@index([orden_id], map: "item_orden_orden_id_foreign")
+  @@index([producto_id], map: "item_orden_producto_id_foreign")
+}
+
+model ordenes {
+  id         BigInt       @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid       String       @unique(map: "ordenes_uuid_unique") @db.Char(36)
+  total      Decimal      @db.Decimal(10, 2)
+  num_items  Int
+  pagado     Boolean      @default(false)
+  fecha_pago DateTime     @db.Date
+  created_at DateTime?    @db.Timestamp(0)
+  updated_at DateTime?    @db.Timestamp(0)
+  item_orden item_orden[]
+}
+
+model movimientos_inventario {
+  id                 BigInt           @id @default(autoincrement()) @db.UnsignedBigInt
+  producto_id        BigInt           @db.UnsignedBigInt
+  tipo_movimiento_id BigInt           @db.UnsignedBigInt
+  cantidad           Int
+  observacion        String?          @db.VarChar(255)
+  created_at         DateTime?        @db.Timestamp(0)
+  updated_at         DateTime?        @db.Timestamp(0)
+  productos          productos        @relation(fields: [producto_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "movimientos_inventario_producto_id_foreign")
+  tipos_movimiento   tipos_movimiento @relation(fields: [tipo_movimiento_id], references: [id], onUpdate: NoAction, map: "movimientos_inventario_tipo_movimiento_id_foreign")
+
+  @@index([producto_id], map: "movimientos_inventario_producto_id_foreign")
+  @@index([tipo_movimiento_id], map: "movimientos_inventario_tipo_movimiento_id_foreign")
+}
+
+model tipos_movimiento {
+  id                     BigInt                   @id @default(autoincrement()) @db.UnsignedBigInt
+  nombre                 String                   @db.VarChar(255)
+  slug                   String                   @unique(map: "tipos_movimiento_slug_unique") @db.VarChar(255)
+  descripcion            String?                  @db.Text
+  created_at             DateTime?                @db.Timestamp(0)
+  updated_at             DateTime?                @db.Timestamp(0)
+  movimientos_inventario movimientos_inventario[]
 }

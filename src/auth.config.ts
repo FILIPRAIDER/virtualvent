@@ -30,37 +30,48 @@ export const authConfig: NextAuthOptions = {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials) {
-        const parsedCredentials = z
-          .object({ email: z.string().email(), password: z.string().min(6) })
+      authorize: async (credentials) => {
+        const parsed = z
+          .object({
+            email: z.string().email(),
+            password: z.string().min(6),
+          })
           .safeParse(credentials);
 
-        if (!parsedCredentials.success) return null;
+        if (!parsed.success) throw new Error("Credenciales inválidas");
 
-        const { email, password } = parsedCredentials.data;
+        const { email, password } = parsed.data;
 
-        // Buscar el correo
         const user = await prisma.users.findUnique({
           where: {
             email: email.toLowerCase(),
           },
+          include: {
+            tipousuarios: true,
+          },
         });
 
-        if (!user) return null;
+        if (!user) throw new Error("El usuario no existe");
 
-        // Comparar las contraseñas
-        if (!bcryptjs.compareSync(password, user.password)) return null;
+        const passwordMatch = bcryptjs.compareSync(password, user.password);
 
-        // Regresar el usuario sin el password
-        const { password: _, ...rest } = user;
+        if (!passwordMatch) throw new Error("Contraseña incorrecta");
 
-        // Convertir los valores de `bigint` a `string` para que coincidan con los tipos de next-auth
-        const userWithCorrectTypes = {
-          ...rest,
-          id: rest.id.toString(), // Asegúrate de convertir `bigint` a `string`
+        // Deshabilitar temporalmente la regla ESLint para esta línea
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { password: _, ...userSafe } = user; // Renombramos `password` a `_` para eliminarlo
+
+        return {
+          id: userSafe.id.toString(), // <- Asegura que no sea BigInt
+          name: userSafe.name,
+          email: userSafe.email,
+          tipousuarios: userSafe.tipousuarios
+            ? {
+                id: userSafe.tipousuarios.id.toString(),
+                nombre: userSafe.tipousuarios.nombre,
+              }
+            : null,
         };
-
-        return userWithCorrectTypes;
       },
     }),
   ],

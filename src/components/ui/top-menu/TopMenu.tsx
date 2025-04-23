@@ -29,13 +29,7 @@ export const TopMenu = () => {
   const closeMenu = useUiStore((state) => state.closeSideMenu);
   const pathname = usePathname();
 
-  const [loaded, setLoaded] = useState(false);
-
   const router = useRouter(); // Using useRouter to handle the navigation and close the dropdown
-
-  useEffect(() => {
-    setLoaded(true);
-  }, []);
 
   const handleMouseEnter = () => {
     if (timeoutId) {

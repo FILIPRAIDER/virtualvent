@@ -10,7 +10,7 @@ import {
 } from "react-icons/tb";
 import { useUiStore } from "@/store";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { IoClose, IoSearchOutline } from "react-icons/io5";
 import { usePathname, useRouter } from "next/navigation"; // Importing useRouter for handling redirections
 import { useSession } from "next-auth/react";

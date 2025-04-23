@@ -6,6 +6,7 @@ import { useEffect } from "react";
 
 import Image from "next/image";
 import { RegisterForm } from "./ui/RegisterForm";
+import Link from "next/link";
 
 export default function RegisterPage() {
   const { status } = useSession();
@@ -18,14 +19,16 @@ export default function RegisterPage() {
 
   return (
     <main className="flex flex-col min-h-screen pt-32 gap-4">
-      <Image
-        src="/LogoVirtualVent.svg"
-        width={300}
-        height={60}
-        alt="Logo"
-        className="w-5/6 md:w-1/2 mx-auto"
-        priority
-      />
+      <Link href="/">
+        <Image
+          src="/LogoVirtualVent.svg"
+          width={300}
+          height={60}
+          alt="Logo"
+          className="w-5/6 md:w-1/2 mx-auto"
+          priority
+        />
+      </Link>
       <article className="flex flex-col items-center text-center mb-10">
         <h1 className="text-xl my-2 poppins font-light">
           Registrarse en <strong className="font-bold">Virtual Vent</strong>

@@ -13,17 +13,12 @@ import "./slideshow.css";
 import { Autoplay, FreeMode, Pagination } from "swiper/modules";
 
 interface Props {
-  images: { imagen: string }[]; // Ahora se espera un arreglo de objetos con la propiedad imagen
+  images: { imagen: string }[]; // Cambiado para aceptar un arreglo de objetos
   title: string;
   className?: string;
 }
 
-export const ProductMobileSlideshow = ({ images, title, className }: Props) => {
-  // Aseguramos que 'images' no esté vacío
-  if (!images || images.length === 0) {
-    return <p>No hay imágenes disponibles.</p>; // Muestra un mensaje si no hay imágenes
-  }
-
+export const ImagesSlideShow = ({ images, title, className }: Props) => {
   return (
     <div className={className}>
       <Swiper
@@ -41,11 +36,11 @@ export const ProductMobileSlideshow = ({ images, title, className }: Props) => {
         {images.map((image, index) => (
           <SwiperSlide key={index}>
             <Image
-              width={600} // Ajusta el tamaño según lo necesites
-              height={400} // Ajusta el tamaño dependiendo del aspecto
-              src={image.imagen} // Usamos image.imagen para acceder a la URL
+              width={1024} // Ajusta el tamaño según lo necesites
+              height={800}
+              src={image.imagen} // Usamos `image.imagen` para acceder a la URL
               alt={title}
-              className="object-cover w-full h-auto" // Asegura que la imagen ocupe todo el ancho y ajuste la altura
+              className="rounded-lg object-fill"
             />
           </SwiperSlide>
         ))}

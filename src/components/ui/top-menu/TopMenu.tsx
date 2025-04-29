@@ -134,6 +134,7 @@ export const TopMenu = () => {
             onMouseLeave={handleMouseLeave} // Using the new handleMouseLeave
           >
             <TbBellFilled size={24} />
+            {/* Todo: desagrupar iconos */}
             <TbUserCircle size={24} className="cursor-pointer" />
 
             {/* Dropdown for user */}

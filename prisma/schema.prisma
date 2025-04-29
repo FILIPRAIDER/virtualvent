@@ -165,8 +165,9 @@ model password_reset_tokens {
 
 model productos {
   id                     BigInt                   @id @default(autoincrement()) @db.UnsignedBigInt
-  nombre                 String                   @db.VarChar(255)
+  nombre                 String                   @unique @db.VarChar(255) // Agregar la restricción única
   descripcion            String                   @db.Text
+  unidad                 String                   @db.VarChar(50)
   stock                  Int
   precio                 Decimal                  @db.Decimal(10, 2)
   categoria_id           BigInt                   @db.UnsignedBigInt
@@ -174,7 +175,7 @@ model productos {
   created_at             DateTime?                @db.Timestamp(0)
   updated_at             DateTime?                @db.Timestamp(0)
   deleted_at             DateTime?                @db.Timestamp(0)
-  imagenes               imagenes[]
+  imagenes               imagenes[] // Relación con el modelo imagenes
   item_orden             item_orden[]
   movimientos_inventario movimientos_inventario[]
   categorias             categorias               @relation(fields: [categoria_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "productos_categoria_id_foreign")

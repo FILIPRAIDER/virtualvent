@@ -24,16 +24,16 @@ export const useCartStore = create<CartState>()(
       cart: [],
 
       getTotalItems: () => {
-        return get().cart.reduce((total, item) => total + item.cantidad, 0);
+        return get().cart.reduce((total, item) => total + item.quantity, 0);
       },
 
       getSummaryInformation: () => {
         const cart = get().cart;
         const total = cart.reduce(
-          (acc, item) => acc + item.precio * item.cantidad,
+          (acc, item) => acc + item.price * item.quantity,
           0
         );
-        const itemsInCart = cart.reduce((acc, item) => acc + item.cantidad, 0);
+        const itemsInCart = cart.reduce((acc, item) => acc + item.quantity, 0);
         return { total, itemsInCart };
       },
 
@@ -46,7 +46,7 @@ export const useCartStore = create<CartState>()(
         } else {
           const updated = cart.map((item) =>
             item.id === product.id
-              ? { ...item, cantidad: item.cantidad + product.cantidad }
+              ? { ...item, quantity: item.quantity + product.quantity }
               : item
           );
           set({ cart: updated });
@@ -55,7 +55,7 @@ export const useCartStore = create<CartState>()(
 
       updateProductQuantity: (productId: string, quantity: number) => {
         const updated = get().cart.map((item) =>
-          item.id === productId ? { ...item, cantidad: quantity } : item
+          item.id === productId ? { ...item, quantity } : item
         );
         set({ cart: updated });
       },

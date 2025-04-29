@@ -4,11 +4,15 @@ import {
   StoreSlideShow,
 } from "@/components";
 import { BannerSlide } from "./ui/BannerSlide";
-export default function Home() {
+import { getProductos } from "@/actions";
+
+export default async function Home() {
+  const productos = await getProductos();
+
   return (
     <>
       <BannerSlide />
-      <ProductSlideShow />
+      <ProductSlideShow productos={productos} />
       <CategorySlideShow />
       <StoreSlideShow />
     </>

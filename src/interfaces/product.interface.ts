@@ -1,3 +1,5 @@
+import { Decimal } from "@prisma/client/runtime/library";
+
 export interface Product {
   id: string; // Prisma lo define como BigInt, pero puedes convertirlo a string en el cliente
   nombre: string;
@@ -10,6 +12,56 @@ export interface Product {
   imagenes: ProductImage[];
 }
 
+export interface ProductoConImagen {
+  id: string; // porque lo convertimos desde bigint
+  nombre: string;
+  descripcion: string;
+  stock: number;
+  precio: string; // lo convertimos desde Decimal
+  unidad: string;
+  imagenes: { imagen: string }[];
+}
+
+export interface producto {
+  id: bigint;
+  nombre: string;
+  descripcion: string;
+  precio: Decimal; // Cambiado de 'number' a 'Decimal'
+  stock: number;
+  unidad?: string;
+  imagenes: {
+    id: bigint;
+    producto_id: bigint;
+    imagen: string;
+  }[];
+  deleted_at: Date | null;
+  created_at: Date | null;
+  updated_at: Date | null;
+}
+// interfaces/producto-client.ts
+export interface ProductoClient {
+  id: string;
+  nombre: string;
+  descripcion: string;
+  stock: number;
+  precio: number;
+  categoria_id: bigint;
+  corporativo_id: bigint;
+  created_at: Date | null;
+  updated_at: Date | null;
+  deleted_at: Date | null;
+  imagenes: { imagen: string }[];
+}
+
+export interface ProductoSlideShow {
+  nombre: string;
+  precio: number;
+  unidad: string;
+  imagen: string;
+  descripcion: string;
+  stock: number;
+}
+
 export interface ProductImage {
   id: string;
   imagen: string; // URL
@@ -18,9 +70,9 @@ export interface ProductImage {
 
 export interface CartProduct {
   id: string;
-  nombre: string;
-  slug: string; // podrías usar un campo adicional en productos para esto
-  precio: number;
-  cantidad: number;
-  imagen: string;
+  slug: string;
+  title: string;
+  price: number;
+  quantity: number;
+  image: string;
 }

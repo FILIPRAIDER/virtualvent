@@ -22,12 +22,12 @@ export const getProductos = async (): Promise<ProductoConImagen[]> => {
   });
 
   return productos.map((producto) => ({
-    id: producto.id.toString(), // ✅ bigint → string
+    id: producto.uuid || "",
     nombre: producto.nombre,
     descripcion: producto.descripcion,
     stock: producto.stock,
-    precio: producto.precio.toString(), // ✅ Decimal → string
-    unidad: "Unidad", // ✅ Valor mock (hasta que lo agregues a la base)
+    precio: producto.precio.toString(),
+    unidad: producto.unidad,
     imagenes: producto.imagenes,
   }));
 };

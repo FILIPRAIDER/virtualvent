@@ -104,7 +104,9 @@ export const TopMenu = () => {
           </div>
           {/* Icons */}
           <div className="flex gap-1">
-            <TbShoppingCartFilled size={24} className="mx-2" />
+            <Link href="/carrito">
+              <TbShoppingCartFilled size={24} className="mx-2 cursor-pointer" />
+            </Link>
             <div className="relative w-6 h-6 md:hidden">
               <TbMenu2
                 size={24}
@@ -128,12 +130,15 @@ export const TopMenu = () => {
           </div>
 
           {/* User Icon and Dropdown */}
+          <TbBellFilled
+            size={24}
+            className="cursor-pointer mr-2 hidden md:block"
+          />
           <div
             className="items-center gap-2 mr-2 hidden sm:flex relative group"
             onMouseEnter={handleMouseEnter} // Using the new handleMouseEnter
             onMouseLeave={handleMouseLeave} // Using the new handleMouseLeave
           >
-            <TbBellFilled size={24} />
             {/* Todo: desagrupar iconos */}
             <TbUserCircle size={24} className="cursor-pointer" />
 

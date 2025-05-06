@@ -34,21 +34,21 @@ const tiendas = [
 
 export const StoreSlideShow = () => {
   return (
-    <section className="px-24 py-8 relative">
+    <section className="px-4 sm:px-8 lg:px-24 py-8 relative">
       {/* Título */}
-      <div className="flex justify-between items-center mb-8">
-        <h2 className="text-3xl font-bold">Tiendas Oficiales</h2>
-        <a href="/tiendas" className="text-sm text-[#093F51]">
+      <div className="flex flex-col md:flex-row justify-between md:items-center gap-2 mb-8">
+        <h2 className="text-2xl sm:text-3xl font-bold">Tiendas Oficiales</h2>
+        <a href="/tiendas" className="text-sm md:text-sm text-[#093F51]">
           Ver todas las tiendas →
         </a>
       </div>
 
       {/* Flechas personalizadas */}
-      <button className="swiper-button-prev-store absolute left-16 top-[50%] z-10 transform -translate-y-1/2 bg-[#575757] shadow-md rounded-full p-2 text-white">
+      <button className="swiper-button-prev-store absolute left-4 sm:left-16 top-[50%] z-10 transform -translate-y-1/2 bg-[#575757] shadow-md rounded-full p-2 text-white">
         <IoChevronBack size={24} />
       </button>
 
-      <button className="swiper-button-next-store absolute right-16 top-[50%] z-10 transform -translate-y-1/2 bg-[#575757] shadow-md rounded-full p-2 text-white">
+      <button className="swiper-button-next-store absolute right-4 sm:right-16 top-[50%] z-10 transform -translate-y-1/2 bg-[#575757] shadow-md rounded-full p-2 text-white">
         <IoChevronForward size={24} />
       </button>
 
@@ -60,24 +60,30 @@ export const StoreSlideShow = () => {
           prevEl: ".swiper-button-prev-store",
         }}
         spaceBetween={16}
-        slidesPerView={2}
+        slidesPerView={1} // Por defecto 1 elemento en pantallas pequeñas
         breakpoints={{
-          640: { slidesPerView: 2 },
-          768: { slidesPerView: 3 },
-          1024: { slidesPerView: 4 },
+          640: {
+            slidesPerView: 2, // 2 productos en pantallas medianas
+          },
+          768: {
+            slidesPerView: 3, // 3 productos en pantallas grandes
+          },
+          1024: {
+            slidesPerView: 4, // 4 productos en pantallas más grandes
+          },
         }}
         className="pb-10"
       >
         {tiendas.map((tienda, index) => (
           <SwiperSlide key={index}>
             <div className="flex justify-center">
-              <div className="w-70">
+              <div className="w-60 sm:w-72">
                 <Image
                   src={tienda.imagen}
                   alt={tienda.nombre}
                   width={256}
                   height={256}
-                  className="rounded-[6px] w-full h-70 object-cover"
+                  className="rounded-[6px] w-full h-72 object-cover"
                   priority
                 />
                 <p className="text-center mt-2 text-lg font-semibold text-[#252525]">

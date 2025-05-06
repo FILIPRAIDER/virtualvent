@@ -1,7 +1,7 @@
 import { Decimal } from "@prisma/client/runtime/library";
 
 export interface Product {
-  id: string; // Prisma lo define como BigInt, pero puedes convertirlo a string en el cliente
+  id: string;
   nombre: string;
   descripcion: string;
   precio: number;
@@ -23,15 +23,15 @@ export interface ProductoConImagen {
 }
 
 export interface producto {
-  id: bigint;
+  id: string;
   nombre: string;
   descripcion: string;
   precio: Decimal; // Cambiado de 'number' a 'Decimal'
   stock: number;
-  unidad?: string;
+  unidad: string;
   imagenes: {
-    id: bigint;
-    producto_id: bigint;
+    id: string;
+    producto_id: string;
     imagen: string;
   }[];
   deleted_at: Date | null;

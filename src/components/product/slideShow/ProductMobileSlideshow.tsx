@@ -1,51 +1,77 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 // Import Swiper React components
+import { Swiper as SwiperObject } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/free-mode";
-import "swiper/css/pagination";
+import "swiper/css/navigation";
+import "swiper/css/thumbs";
 
 import "./slideshow.css";
-import { Autoplay, FreeMode, Pagination } from "swiper/modules";
+import { FreeMode, Navigation, Thumbs } from "swiper/modules";
+import { ProductImage } from "../product-image/ProductImage";
 
 interface Props {
-  images: { imagen: string }[]; // Ahora se espera un arreglo de objetos con la propiedad imagen
+  images: { imagen: string }[]; // Arreglo de objetos con las imágenes
   title: string;
   className?: string;
 }
 
 export const ProductMobileSlideshow = ({ images, title, className }: Props) => {
-  // Aseguramos que 'images' no esté vacío
-  if (!images || images.length === 0) {
-    return <p>No hay imágenes disponibles.</p>; // Muestra un mensaje si no hay imágenes
-  }
+  const [thumbsSwiper, setThumbsSwiper] = useState<SwiperObject>();
 
   return (
     <div className={className}>
+      {/* Slider Principal */}
       <Swiper
-        style={{
-          width: "100%",
-          height: "auto", // Ajuste dinámico según la imagen
-        }}
-        pagination
-        autoplay={{
-          delay: 2500,
-        }}
-        modules={[FreeMode, Autoplay, Pagination]}
+        style={
+          {
+            "--swiper-navigation-color": "#fff",
+            "--swiper-pagination-color": "#fff",
+          } as React.CSSProperties
+        }
+        spaceBetween={10} // Espaciado entre las imágenes
+        navigation={true} // Habilitar navegación
+        thumbs={{ swiper: thumbsSwiper }} // Conectar el slider principal con el mini slider
+        modules={[FreeMode, Navigation, Thumbs]} // Usamos FreeMode y Thumbs
         className="mySwiper2"
       >
         {images.map((image, index) => (
           <SwiperSlide key={index}>
-            <Image
-              width={600} // Ajusta el tamaño según lo necesites
-              height={400} // Ajusta el tamaño dependiendo del aspecto
-              src={image.imagen} // Usamos image.imagen para acceder a la URL
+            <ProductImage
+              width={1024} // Tamaño de las imágenes en el slider principal
+              height={800}
+              src={image.imagen}
               alt={title}
-              className="object-cover w-full h-auto" // Asegura que la imagen ocupe todo el ancho y ajuste la altura
+              className="rounded-lg object-fill"
+            />
+          </SwiperSlide>
+        ))}
+      </Swiper>
+
+      {/* Mini Slider con margen en X */}
+      <Swiper
+        onSwiper={setThumbsSwiper} // Establecer la referencia del mini slider
+        spaceBetween={10} // Espaciado entre las miniaturas
+        slidesPerView={4} // Mostrar 4 miniaturas a la vez
+        freeMode={true} // Habilitar modo libre
+        watchSlidesProgress={true} // Permite hacer seguimiento del progreso
+        modules={[FreeMode, Navigation, Thumbs]} // Usamos FreeMode y Thumbs
+        className="mySwiper my-4 mx-4" // Agregado el margen en el eje X con mx-4
+      >
+        {images.map((image, index) => (
+          <SwiperSlide key={index}>
+            <ProductImage
+              width={300} // Tamaño de las miniaturas
+              height={300}
+              src={image.imagen}
+              alt={title}
+              className="rounded-lg object-cover cursor-pointer"
             />
           </SwiperSlide>
         ))}

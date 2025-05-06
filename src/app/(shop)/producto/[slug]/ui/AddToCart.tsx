@@ -1,35 +1,32 @@
 "use client";
 
 import { QuantitySelector } from "@/components";
-import { CartProduct, ProductoClient } from "@/interfaces"; // Asegúrate de importar la interfaz 'producto'
+import { CartProduct, ProductoClient } from "@/interfaces";
 import { useCartStore } from "@/store";
 import { useState } from "react";
 
 interface Props {
-  product: ProductoClient; // Aceptamos un objeto de tipo 'producto'
+  product: ProductoClient;
 }
 
 export const AddToCart = ({ product }: Props) => {
   const addProductToCart = useCartStore((state) => state.addProductToCart);
 
-  const [quantity, setQuantity] = useState<number>(1); // Solo evaluamos la cantidad
+  const [quantity, setQuantity] = useState<number>(1);
   const [posted, setPosted] = useState(false);
 
   const addToCart = () => {
     setPosted(true);
     if (quantity <= 0 || quantity > product.stock) {
-      // Validación de cantidad disponible en el stock
       setPosted(false);
       return; // No agregar al carrito si la cantidad no es válida
     }
 
-    console.log({ quantity, product });
-
     const cartProduct: CartProduct = {
-      id: product.id.toString(), // ✅ bigint → string
+      id: product.id.toString(),
       slug: product.nombre.toLowerCase().replace(/\s+/g, "-"),
       title: product.nombre,
-      price: Number(product.precio), // ✅ Decimal → number
+      price: Number(product.precio),
       quantity: quantity,
       image: product.imagenes?.[0]?.imagen || "",
     };
@@ -52,14 +49,11 @@ export const AddToCart = ({ product }: Props) => {
         </span>
       )}
 
-      {/* Selector de cantidad */}
       <QuantitySelector
         quantity={quantity}
         onQuantityChanged={setQuantity}
         stock={product.stock}
       />
-
-      {/* Botón para agregar al carrito */}
       <button onClick={addToCart} className="btn-primary my-5">
         Agregar al carrito
       </button>

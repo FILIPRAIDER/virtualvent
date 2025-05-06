@@ -40,13 +40,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ProductPage({ params }: Props) {
   const { slug } = await params;
-
-  // Normalizamos el slug
   const normalizedSlug = normalizeSlug(slug);
-
-  // Intentamos obtener el producto usando el slug normalizado
   const producto = await getProductBySlug(normalizedSlug);
-  console.log(producto);
 
   if (!producto || !producto.imagenes || producto.imagenes.length === 0) {
     notFound(); // Redirige a "No encontrado" si el producto no existe
@@ -56,15 +51,15 @@ export default async function ProductPage({ params }: Props) {
 
   return (
     <div className="mt-5 mb-20 grid grid-cols-1 md:grid-cols-3 gap-3">
-      {/* SlideShow */}
-      <div className="col-span-1 md:col-span-2 ">
-        {/* Mobile Slideshow */}
+      {/* Galería de imágenes */}
+      <div className="col-span-1 md:col-span-2 w-full px-1.5">
+        {/* Slider para dispositivos móviles */}
         <ProductMobileSlideshow
           className="block md:hidden"
           images={imageUrls}
           title={producto.nombre}
         />
-        {/* Desktop Slideshow */}
+        {/* Slider para escritorio */}
         <ImagesSlideShow
           className="hidden md:block"
           images={imageUrls}
@@ -72,19 +67,16 @@ export default async function ProductPage({ params }: Props) {
         />
       </div>
 
-      {/* Detalles */}
-      <div className="col-span-1 px-5 ">
-        {/* Stock */}
+      {/* Detalles del producto */}
+      <div className="col-span-1 px-5">
         <StockLabel slug={producto.nombre} />
-
         <h1 className="antialiased font-bold text-xl">{producto.nombre}</h1>
         <p className="text-lg mb-5">
           {currencyFormat(Number(producto.precio))}
         </p>
-
         <AddToCart product={producto} />
 
-        {/* Descripcion */}
+        {/* Descripción */}
         <h3 className="font-bold text-sm">Descripción</h3>
         <p className="font-light">{producto.descripcion}</p>
       </div>

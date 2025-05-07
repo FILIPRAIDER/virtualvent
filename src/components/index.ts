@@ -4,6 +4,7 @@ export * from "./product/quantity-selector/QuantitySelector";
 export * from "./product/slideShow/ProductMobileSlideshow";
 export * from "./product/slideShow/ImagesSlideShow";
 export * from "./products/slideShow/ProductSlideshow";
+export * from "./product/slideShow/ProductImageVerticalSwiper";
 export * from "./category/slideShow/CategorySlideShow";
 export * from "./tiendas/slideShow/StoreSlideShow";
 // export * from './ui/footer/Footer';

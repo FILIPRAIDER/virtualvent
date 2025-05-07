@@ -54,9 +54,17 @@ export const AddToCart = ({ product }: Props) => {
         onQuantityChanged={setQuantity}
         stock={product.stock}
       />
-      <button onClick={addToCart} className="btn-primary my-5">
-        Agregar al carrito
-      </button>
+      <div className="flex flex-col items-center justify-center mt-10 gap-4">
+        <button className="bg-[#093F51] text-white w-full rounded h-12">
+          Comprar ahora
+        </button>
+        <button
+          onClick={addToCart}
+          className="btn-primary mb-5 w-full border border-[#093F51] h-12 rounded bg-white text-[#093F51]"
+        >
+          Agregar al carrito
+        </button>
+      </div>
     </>
   );
 };

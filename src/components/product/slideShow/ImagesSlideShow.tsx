@@ -1,46 +1,62 @@
 "use client";
 
-import Image from "next/image";
-// Import Swiper React components
+import { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-
-// Import Swiper styles
 import "swiper/css";
 import "swiper/css/free-mode";
-import "swiper/css/pagination";
-
-import "./slideshow.css";
-import { Autoplay, FreeMode, Pagination } from "swiper/modules";
+import "swiper/css/navigation";
+import "swiper/css/thumbs";
+import { FreeMode, Navigation, Thumbs } from "swiper/modules";
+import { ProductImage } from "../product-image/ProductImage"; // Asegúrate de tener el componente ProductImage
+import { ProductImageVerticalSwiper } from "./ProductImageVerticalSwiper"; // Importamos el swiper vertical
 
 interface Props {
-  images: { imagen: string }[]; // Cambiado para aceptar un arreglo de objetos
+  images: { imagen: string }[]; // Arreglo de objetos con las imágenes
   title: string;
   className?: string;
 }
 
 export const ImagesSlideShow = ({ images, title, className }: Props) => {
+  const [thumbsSwiper, setThumbsSwiper] = useState<any>();
+  const [swiperMain, setSwiperMain] = useState<any>(); // Estado para el swiper principal
+
+  // Función para cambiar la imagen grande cuando se hace clic en una miniatura
+  const handleThumbnailClick = (index: number) => {
+    swiperMain.slideTo(index); // Navegar al slide correspondiente en el swiper principal
+  };
+
   return (
     <div className={className}>
+      {/* Mini Swiper Vertical solo en dispositivos de escritorio */}
+      <ProductImageVerticalSwiper
+        images={images}
+        title={title}
+        onThumbnailClick={handleThumbnailClick} // Enlazamos la función para hacer clic
+      />
+
+      {/* Slider Principal (Imagen Grande) */}
       <Swiper
-        style={{
-          width: "100%",
-          height: "auto", // Ajuste dinámico según la imagen
-        }}
-        pagination
-        autoplay={{
-          delay: 2500,
-        }}
-        modules={[FreeMode, Autoplay, Pagination]}
+        style={
+          {
+            "--swiper-navigation-color": "#fff",
+            "--swiper-pagination-color": "#fff",
+          } as React.CSSProperties
+        }
+        onSwiper={setSwiperMain} // Establecer el swiper principal
+        spaceBetween={10} // Espaciado entre las imágenes
+        navigation={true} // Habilitar navegación
+        thumbs={{ swiper: thumbsSwiper }} // Conectar el slider principal con el mini slider
+        modules={[FreeMode, Navigation, Thumbs]} // Usamos FreeMode y Thumbs
         className="mySwiper2"
       >
         {images.map((image, index) => (
           <SwiperSlide key={index}>
-            <Image
-              width={1024} // Ajusta el tamaño según lo necesites
-              height={800}
-              src={image.imagen} // Usamos `image.imagen` para acceder a la URL
+            <ProductImage
+              width={1024} // Tamaño de las imágenes en el slider principal
+              height={500}
+              src={image.imagen}
               alt={title}
-              className="rounded-lg object-fill"
+              className="rounded-lg object-cover h-[500px]"
             />
           </SwiperSlide>
         ))}

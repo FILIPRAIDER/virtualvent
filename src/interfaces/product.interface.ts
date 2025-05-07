@@ -45,6 +45,7 @@ export interface ProductoClient {
   descripcion: string;
   stock: number;
   precio: number;
+  unidad: string;
   categoria_id: bigint;
   corporativo_id: bigint;
   created_at: Date | null;

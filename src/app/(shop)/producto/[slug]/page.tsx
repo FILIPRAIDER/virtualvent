@@ -1,6 +1,6 @@
 import { getProductBySlug } from "@/actions";
 import { ImagesSlideShow, ProductMobileSlideshow } from "@/components";
-import { currencyFormat, normalizeSlug } from "@/utils";
+import { currencyFormat } from "@/utils";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { AddToCart } from "./ui/AddToCart";

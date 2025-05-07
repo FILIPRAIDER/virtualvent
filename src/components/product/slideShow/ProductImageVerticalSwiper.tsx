@@ -20,7 +20,7 @@ export const ProductImageVerticalSwiper = ({
   title,
   onThumbnailClick,
 }: Props) => {
-  const [thumbsSwiper, setThumbsSwiper] = useState<SwiperClass | null>(null); // Tipo correcto para thumbsSwiper
+  const [, setThumbsSwiper] = useState<SwiperClass | null>(null); // Tipo correcto para thumbsSwiper
 
   return (
     <div className="md:block md:w-24 md:h-[400px] md:overflow-y-auto md:mr-4 mt-1">

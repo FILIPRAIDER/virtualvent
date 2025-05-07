@@ -21,7 +21,7 @@ interface Props {
 
 export const ImagesSlideShow = ({ images, title, className }: Props) => {
   // Ahora usamos SwiperClass como tipo para los estados
-  const [thumbsSwiper, setThumbsSwiper] = useState<SwiperClass | null>(null);
+  const [thumbsSwiper] = useState<SwiperClass | null>(null);
   const [swiperMain, setSwiperMain] = useState<SwiperClass | null>(null); // Estado para el swiper principal
 
   // Función para cambiar la imagen grande cuando se hace clic en una miniatura

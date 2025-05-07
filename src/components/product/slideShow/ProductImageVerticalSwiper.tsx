@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
+import { Swiper, SwiperClass, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/navigation";
@@ -20,7 +20,7 @@ export const ProductImageVerticalSwiper = ({
   title,
   onThumbnailClick,
 }: Props) => {
-  const [thumbsSwiper, setThumbsSwiper] = useState<any>();
+  const [thumbsSwiper, setThumbsSwiper] = useState<SwiperClass | null>(null); // Tipo correcto para thumbsSwiper
 
   return (
     <div className="md:block md:w-24 md:h-[400px] md:overflow-y-auto md:mr-4 mt-1">

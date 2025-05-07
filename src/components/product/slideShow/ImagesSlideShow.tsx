@@ -10,6 +10,9 @@ import { FreeMode, Navigation, Thumbs } from "swiper/modules";
 import { ProductImage } from "../product-image/ProductImage"; // Asegúrate de tener el componente ProductImage
 import { ProductImageVerticalSwiper } from "./ProductImageVerticalSwiper"; // Importamos el swiper vertical
 
+// Importa el tipo SwiperClass para usarlo como tipo en lugar de 'any'
+import { Swiper as SwiperClass } from "swiper/types";
+
 interface Props {
   images: { imagen: string }[]; // Arreglo de objetos con las imágenes
   title: string;
@@ -17,12 +20,15 @@ interface Props {
 }
 
 export const ImagesSlideShow = ({ images, title, className }: Props) => {
-  const [thumbsSwiper] = useState<any>();
-  const [swiperMain, setSwiperMain] = useState<any>(); // Estado para el swiper principal
+  // Ahora usamos SwiperClass como tipo para los estados
+  const [thumbsSwiper, setThumbsSwiper] = useState<SwiperClass | null>(null);
+  const [swiperMain, setSwiperMain] = useState<SwiperClass | null>(null); // Estado para el swiper principal
 
   // Función para cambiar la imagen grande cuando se hace clic en una miniatura
   const handleThumbnailClick = (index: number) => {
-    swiperMain.slideTo(index); // Navegar al slide correspondiente en el swiper principal
+    if (swiperMain) {
+      swiperMain.slideTo(index); // Navegar al slide correspondiente en el swiper principal
+    }
   };
 
   return (

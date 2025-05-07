@@ -17,7 +17,7 @@ interface Props {
 }
 
 export const ImagesSlideShow = ({ images, title, className }: Props) => {
-  const [thumbsSwiper, setThumbsSwiper] = useState<any>();
+  const [thumbsSwiper] = useState<any>();
   const [swiperMain, setSwiperMain] = useState<any>(); // Estado para el swiper principal
 
   // Función para cambiar la imagen grande cuando se hace clic en una miniatura

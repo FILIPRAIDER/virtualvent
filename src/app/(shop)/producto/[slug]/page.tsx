@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import { AddToCart } from "./ui/AddToCart";
 import Link from "next/link";
 import { IoArrowBack } from "react-icons/io5"; // Importar el icono de "volver"
+import { transformSlugToTitle } from "@/utils/TransformSlugToTittle";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -38,7 +39,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ProductPage({ params }: Props) {
   const { slug } = await params;
-  const normalizedSlug = normalizeSlug(slug);
+  const normalizedSlug = transformSlugToTitle(slug);
+
+  console.log(normalizedSlug); // Verifica el slug normalizado
   const producto = await getProductBySlug(normalizedSlug);
 
   if (!producto || !producto.imagenes || producto.imagenes.length === 0) {

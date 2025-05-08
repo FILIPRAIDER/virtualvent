@@ -51,7 +51,7 @@ export const authOptions: NextAuthOptions = {
         const passwordMatch = bcryptjs.compareSync(password, user.password);
         if (!passwordMatch) throw new Error("Contraseña incorrecta");
 
-        const { password: _password, ...userSafe } = user; // Elimina explícitamente la propiedad sin usar `delete`
+        const { password: _, ...userSafe } = user;
 
         return {
           id: userSafe.id.toString(),

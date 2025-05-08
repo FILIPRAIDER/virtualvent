@@ -10,8 +10,10 @@ import {
 import { BannerSlide } from "./ui/BannerSlide";
 
 export default async function Home() {
-  const productos = await getProductos();
-  const tiendas = await getAllShops();
+  const [productos, tiendas] = await Promise.all([
+    getProductos(),
+    getAllShops(),
+  ]);
 
   return (
     <>

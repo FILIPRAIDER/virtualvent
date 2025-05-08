@@ -11,12 +11,14 @@ import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import clsx from "clsx";
 import { useShallow } from "zustand/react/shallow";
+import { Cliente } from "@/interfaces";
 
 export const PlaceOrder = () => {
   const { data: session } = useSession();
   const router = useRouter();
 
-  const [cliente, setCliente] = useState<any>(null);
+  const [cliente, setCliente] = useState<Cliente | null>(null);
+
   const [loaded, setLoaded] = useState(false);
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
   const [errorMessagge, setErrorMessagge] = useState("");
@@ -30,7 +32,25 @@ export const PlaceOrder = () => {
 
   useEffect(() => {
     setLoaded(true);
-    getClienteByUserId().then((data) => setCliente(data));
+    getClienteByUserId().then((data) => {
+      if (!data) return;
+
+      const clienteTransformado: Cliente = {
+        id: data.id.toString(),
+        uuid: data.uuid,
+        primer_nombre: data.primer_nombre,
+        segundo_nombre: data.segundo_nombre ?? undefined,
+        primer_apellido: data.primer_apellido,
+        segundo_apellido: data.segundo_apellido ?? undefined,
+        tipo_documento: data.tipo_documento,
+        numero_documento: data.numero_documento,
+        telefono: data.telefono,
+        sexo: data.sexo,
+        fecha_nacimiento: data.fecha_nacimiento.toISOString(),
+      };
+
+      setCliente(clienteTransformado);
+    });
   }, []);
 
   const onPlaceOrder = async () => {

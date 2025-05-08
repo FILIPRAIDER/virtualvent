@@ -5,8 +5,8 @@ export const BannerSlide = () => {
   return (
     <div className="h-screen z-0 w-full bg-[url('/imgs/banner.webp')] bg-cover bt-top bg-no-repeat ">
       <div className="flex flex-col text-center">
-        <div className="flex z-10 justify-center h-full w-full text-center text-white text-4xl font-bold mt-6 px-6">
-          <h1 className="text-[32px] md:text-[80px] uppercase bowlby tracking-[4px] max-w-6xl mt-20 antialiased">
+        <div className="flex z-10 justify-center h-full w-full text-center text-white text-4xl font-bold mt-16 px-6">
+          <h1 className="text-[32px] md:text-[60px] uppercase bowlby tracking-[4px] max-w-6xl mt-20 antialiased">
             Transformando mercados, empoderando{" "}
             <span className="text-[#63C0E8]">comunidades</span>
           </h1>

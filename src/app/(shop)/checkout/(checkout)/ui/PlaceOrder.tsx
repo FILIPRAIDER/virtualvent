@@ -46,7 +46,7 @@ export const PlaceOrder = () => {
     });
 
     if (!resp.ok) {
-      setErrorMessagge(resp.message);
+      setErrorMessagge(resp.message ?? "Ocurrió un error inesperado");
       setIsPlacingOrder(false);
       return;
     }

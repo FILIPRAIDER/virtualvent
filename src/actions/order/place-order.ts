@@ -5,21 +5,23 @@ import { authOptions } from "@/auth.config";
 import { prisma } from "@/lib/prisma";
 
 interface ProductToOrder {
-  productId: string; // UUID del producto
+  productId: string;
   quantity: number;
+}
+
+interface Address {
+  address: string;
+  city: string;
+  country: string;
+  postalCode: string;
+  firstName: string;
+  lastName: string;
+  phone: string;
 }
 
 export const placeOrder = async (
   products: ProductToOrder[],
-  p0: {
-    address: string;
-    city: string;
-    country: string;
-    postalCode: string;
-    firstName: string;
-    lastName: string;
-    phone: string;
-  }
+  address: Address
 ) => {
   const session = await getServerSession(authOptions);
   const userId = session?.user?.id;
@@ -79,8 +81,9 @@ export const placeOrder = async (
     });
 
     return { ok: true, order: createdOrder };
-  } catch (error: any) {
-    console.error("Error al crear orden:", error);
-    return { ok: false, message: error.message };
+  } catch (error: unknown) {
+    const err = error as Error;
+    console.error("Error al crear orden:", err);
+    return { ok: false, message: err.message };
   }
 };

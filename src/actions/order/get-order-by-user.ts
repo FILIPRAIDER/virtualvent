@@ -12,6 +12,9 @@ export const getOrdersByUser = async () => {
   }
 
   const orders = await prisma.ordenes.findMany({
+    where: {
+      user_id: Number(session.user.id), // asegúrate que sea `BigInt` o `number`
+    },
     orderBy: { created_at: "desc" },
   });
 

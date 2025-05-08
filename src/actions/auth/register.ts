@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/prisma";
 import bcryptjs from "bcryptjs";
+import { randomUUID } from "crypto";
 
 interface PrismaError extends Error {
   code?: string;
@@ -33,6 +34,7 @@ export const registerUser = async (
 
     const user = await prisma.users.create({
       data: {
+        uuid: randomUUID(), // 👈 Aquí se asigna el UUID
         name,
         email: email.toLowerCase(),
         password: hashedPassword,
@@ -41,11 +43,11 @@ export const registerUser = async (
       },
       select: {
         id: true,
+        uuid: true, // 👈 si deseas retornarlo
         name: true,
         email: true,
       },
     });
-
     return {
       ok: true,
       user: {

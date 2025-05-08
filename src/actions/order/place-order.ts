@@ -64,6 +64,7 @@ export const placeOrder = async (products: ProductToOrder[]) => {
           num_items: items.reduce((sum, i) => sum + i.cantidad, 0),
           pagado: false,
           fecha_pago: new Date(),
+          user_id: BigInt(userId), // 👈 Asegúrate que esto sea BigInt si tu modelo lo usa
         },
       });
 

@@ -8,23 +8,29 @@ import "swiper/css/navigation";
 import Image from "next/image";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 import { FaMapMarkerAlt } from "react-icons/fa";
-import { getAllShops } from "@/actions/shop/get-all-shops";
 import { useEffect, useState } from "react";
 
 export const StoreSlideShow = () => {
-  const [tiendas, setTiendas] = useState<{ nombre: string; imagen: string }[]>(
+  const [tiendas, setTiendas] = useState<{ nombre: string; logo: string }[]>(
     []
   );
 
   useEffect(() => {
     const fetchTiendas = async () => {
-      const shops = await getAllShops();
-      setTiendas(
-        shops.map((shop) => ({
-          nombre: shop.nombre,
-          imagen: shop.logo || "", // Provide a fallback if logo is null
-        }))
-      );
+      try {
+        const res = await fetch("/api/tiendas");
+
+        if (!res.ok) {
+          const message = await res.text();
+          console.error("Error al cargar tiendas:", message);
+          return;
+        }
+
+        const data = await res.json();
+        setTiendas(data);
+      } catch (error) {
+        console.error("Error inesperado:", error);
+      }
     };
 
     fetchTiendas();
@@ -32,7 +38,6 @@ export const StoreSlideShow = () => {
 
   return (
     <section className="px-4 sm:px-8 lg:px-24 py-8 relative">
-      {/* Título */}
       <div className="flex flex-col md:flex-row justify-between md:items-center gap-2 mb-8">
         <h2 className="text-2xl sm:text-3xl font-bold">Tiendas Oficiales</h2>
         <a href="/tiendas" className="text-sm md:text-sm text-[#093F51]">
@@ -40,7 +45,6 @@ export const StoreSlideShow = () => {
         </a>
       </div>
 
-      {/* Flechas personalizadas */}
       <button className="swiper-button-prev-store absolute left-4 sm:left-16 top-[50%] z-10 transform -translate-y-1/2 bg-[#575757] shadow-md rounded-full p-2 text-white">
         <IoChevronBack size={24} />
       </button>
@@ -49,7 +53,6 @@ export const StoreSlideShow = () => {
         <IoChevronForward size={24} />
       </button>
 
-      {/* Swiper */}
       <Swiper
         modules={[Navigation]}
         navigation={{
@@ -57,17 +60,11 @@ export const StoreSlideShow = () => {
           prevEl: ".swiper-button-prev-store",
         }}
         spaceBetween={16}
-        slidesPerView={1} // Por defecto 1 elemento en pantallas pequeñas
+        slidesPerView={1}
         breakpoints={{
-          640: {
-            slidesPerView: 2, // 2 productos en pantallas medianas
-          },
-          768: {
-            slidesPerView: 3, // 3 productos en pantallas grandes
-          },
-          1024: {
-            slidesPerView: 4, // 4 productos en pantallas más grandes
-          },
+          640: { slidesPerView: 2 },
+          768: { slidesPerView: 3 },
+          1024: { slidesPerView: 4 },
         }}
         className="pb-10"
       >
@@ -76,7 +73,7 @@ export const StoreSlideShow = () => {
             <div className="flex justify-center">
               <div className="w-60 sm:w-72">
                 <Image
-                  src={tienda.imagen}
+                  src={tienda.logo || "/default-logo.png"}
                   alt={tienda.nombre}
                   width={256}
                   height={256}

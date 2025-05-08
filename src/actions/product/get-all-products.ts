@@ -11,7 +11,8 @@ export const getProductos = async (): Promise<ProductoConImagen[]> => {
   });
 
   return productos.map((producto) => ({
-    id: producto.uuid || "",
+    id: producto.uuid || "", // <- tu ID interno
+    uuid: producto.uuid || "", // <- requerido por ProductoConImagen
     nombre: producto.nombre,
     descripcion: producto.descripcion,
     stock: producto.stock,

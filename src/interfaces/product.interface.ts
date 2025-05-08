@@ -14,6 +14,7 @@ export interface Product {
 
 export interface ProductoConImagen {
   id: string; // porque lo convertimos desde bigint
+  uuid: string; // UUID
   nombre: string;
   descripcion: string;
   stock: number;

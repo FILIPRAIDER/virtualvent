@@ -1,11 +1,10 @@
 import type { NextAuthOptions } from "next-auth";
-import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { z } from "zod";
 import { prisma } from "./lib/prisma";
 import bcryptjs from "bcryptjs";
 
-export const authConfig: NextAuthOptions = {
+export const authOptions: NextAuthOptions = {
   pages: {
     signIn: "/auth/login",
     newUser: "/auth/new-account",
@@ -43,26 +42,19 @@ export const authConfig: NextAuthOptions = {
         const { email, password } = parsed.data;
 
         const user = await prisma.users.findUnique({
-          where: {
-            email: email.toLowerCase(),
-          },
-          include: {
-            tipousuarios: true,
-          },
+          where: { email: email.toLowerCase() },
+          include: { tipousuarios: true },
         });
 
         if (!user) throw new Error("El usuario no existe");
 
         const passwordMatch = bcryptjs.compareSync(password, user.password);
-
         if (!passwordMatch) throw new Error("Contraseña incorrecta");
 
-        // Deshabilitar temporalmente la regla ESLint para esta línea
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { password: _, ...userSafe } = user; // Renombramos `password` a `_` para eliminarlo
+        const { password: _, ...userSafe } = user;
 
         return {
-          id: userSafe.id.toString(), // <- Asegura que no sea BigInt
+          id: userSafe.id.toString(),
           name: userSafe.name,
           email: userSafe.email,
           tipousuarios: userSafe.tipousuarios
@@ -76,5 +68,3 @@ export const authConfig: NextAuthOptions = {
     }),
   ],
 };
-
-export const { signIn, signOut, auth, handlers } = NextAuth(authConfig);

@@ -25,9 +25,12 @@ export default function CartPage() {
 
           <OrderSummary />
 
-          <button className="w-full bg-[#093F51] text-white py-2 rounded mt-5 text-sm">
+          <Link
+            href="/checkout"
+            className="block w-full bg-[#093F51] text-white py-2 rounded mt-5 text-sm text-center"
+          >
             Checkout
-          </button>
+          </Link>
 
           <p className="text-[11px] text-gray-600 mt-4">
             ⚠️ Importante: Por ahora, los productos se recogen únicamente en la

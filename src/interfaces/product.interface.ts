@@ -75,7 +75,6 @@ export interface CartProduct {
   title: string;
   price: number;
   stock: number;
-  unidad?: string;
   quantity: number;
   image: string;
 }

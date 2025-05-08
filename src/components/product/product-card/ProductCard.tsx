@@ -11,6 +11,7 @@ interface Props {
     imagenes: { imagen: string }[]; // Arreglo de objetos con propiedad 'imagen'
     precio: string;
     unidad: string;
+    stock: number;
   };
 }
 
@@ -35,6 +36,7 @@ export const ProductCard = ({ producto }: Props) => {
       price: Number(producto.precio), // Convertimos el precio a número
       quantity: 1, // Suponemos que la cantidad es 1, pero puedes añadir un selector de cantidad si es necesario
       image: imageUrl,
+      stock: producto.stock,
     };
 
     // Agregar el producto al carrito

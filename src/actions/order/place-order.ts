@@ -18,9 +18,15 @@ export const placeOrder = async (products: ProductToOrder[]) => {
   }
 
   try {
+    // Filtramos productId válidos
+    const validProductIds = products
+      .map((p) => p.productId)
+      .filter((id): id is string => typeof id === "string");
+
+    // Obtenemos productos válidos desde la base de datos
     const dbProducts = await prisma.productos.findMany({
       where: {
-        uuid: { in: products.map((p) => p.productId) },
+        uuid: { in: validProductIds },
       },
       select: {
         uuid: true,
@@ -30,10 +36,12 @@ export const placeOrder = async (products: ProductToOrder[]) => {
       },
     });
 
+    // Construimos los ítems a partir de los productos válidos
     const items = products.map((item) => {
       const dbProduct = dbProducts.find((p) => p.uuid === item.productId);
-      if (!dbProduct)
+      if (!dbProduct) {
         throw new Error(`Producto no encontrado: ${item.productId}`);
+      }
 
       return {
         producto_id: dbProduct.id,
@@ -42,10 +50,12 @@ export const placeOrder = async (products: ProductToOrder[]) => {
       };
     });
 
-    const total = items.reduce((acc, item) => {
-      return acc + Number(item.precio) * item.cantidad;
-    }, 0);
+    const total = items.reduce(
+      (acc, item) => acc + Number(item.precio) * item.cantidad,
+      0
+    );
 
+    // Creamos la orden y los items en transacción
     const createdOrder = await prisma.$transaction(async (tx) => {
       const orden = await tx.ordenes.create({
         data: {
@@ -61,13 +71,19 @@ export const placeOrder = async (products: ProductToOrder[]) => {
         data: items.map((item) => ({
           ...item,
           orden_id: orden.id,
+          uuid: crypto.randomUUID(), // asignar uuid a cada item
         })),
       });
 
       return orden;
     });
 
-    return { ok: true, order: createdOrder };
+    return {
+      ok: true,
+      order: {
+        uuid: createdOrder.uuid, // solo pasar uuid para evitar errores con BigInt/Decimal
+      },
+    };
   } catch (error: unknown) {
     const err = error as Error;
     console.error("Error al crear orden:", err);

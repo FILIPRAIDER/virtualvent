@@ -30,8 +30,9 @@ export const PlaceOrder = () => {
 
   const onPlaceOrder = async () => {
     setIsPlacingOrder(true);
+
     const productsToOrder = cart.map((p) => ({
-      productId: p.id,
+      productId: p.uuid,
       quantity: p.quantity,
     }));
 
@@ -45,7 +46,7 @@ export const PlaceOrder = () => {
 
     clearCart();
     if (resp.order) {
-      router.replace("/orders/" + resp.order.id);
+      router.replace("/orders/" + resp.order.uuid);
     }
   };
 

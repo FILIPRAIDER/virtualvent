@@ -72,8 +72,8 @@ export interface ProductImage {
 }
 
 export interface CartProduct {
-  id: string;
-  uuid: string;
+  id: string; // Puedes igualarlo a uuid
+  uuid: string; // ✅ Este campo debe estar definido al agregar al carrito
   slug: string;
   title: string;
   price: number;

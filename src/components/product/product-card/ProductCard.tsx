@@ -32,8 +32,8 @@ export const ProductCard = ({ producto }: Props) => {
   const handleAddToCart = () => {
     const cartProduct = {
       id: producto.uuid,
-      uuid: producto.uuid, // <-- AÑADIR ESTA LÍNEA
-      slug,
+      uuid: producto.uuid, // <- Asegura que este campo se incluya
+      slug: slug,
       title: producto.nombre,
       price: Number(producto.precio),
       quantity: 1,

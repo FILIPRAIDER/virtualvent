@@ -77,7 +77,7 @@ export const PlaceOrder = () => {
         <button
           onClick={onPlaceOrder}
           className={clsx(
-            "w-full py-2 rounded text-white text-sm",
+            "w-full py-2 rounded text-white text-sm cursor-pointer",
             isPlacingOrder ? "bg-gray-400 cursor-not-allowed" : "bg-[#093F51]"
           )}
           disabled={isPlacingOrder}

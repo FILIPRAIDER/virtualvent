@@ -71,6 +71,7 @@ export interface ProductImage {
 
 export interface CartProduct {
   id: string;
+  uuid: string;
   slug: string;
   title: string;
   price: number;

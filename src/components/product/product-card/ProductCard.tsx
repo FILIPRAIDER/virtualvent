@@ -8,6 +8,7 @@ import { useCartStore } from "@/store"; // Importa el store para manejar el carr
 interface Props {
   producto: {
     nombre: string;
+    uuid: string; // Asumimos que el id es el uuid del producto
     imagenes: { imagen: string }[]; // Arreglo de objetos con propiedad 'imagen'
     precio: string;
     unidad: string;
@@ -30,16 +31,16 @@ export const ProductCard = ({ producto }: Props) => {
   // Función para manejar la adición al carrito
   const handleAddToCart = () => {
     const cartProduct = {
-      id: producto.nombre, // Asumimos que el id es el nombre del producto (puedes usar otro campo único)
-      slug: slug,
+      id: producto.uuid,
+      uuid: producto.uuid, // <-- AÑADIR ESTA LÍNEA
+      slug,
       title: producto.nombre,
-      price: Number(producto.precio), // Convertimos el precio a número
-      quantity: 1, // Suponemos que la cantidad es 1, pero puedes añadir un selector de cantidad si es necesario
+      price: Number(producto.precio),
+      quantity: 1,
       image: imageUrl,
       stock: producto.stock,
     };
 
-    // Agregar el producto al carrito
     addProductToCart(cartProduct);
   };
 

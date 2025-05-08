@@ -39,7 +39,7 @@ export const authOptions: NextAuthOptions = {
 
         if (!parsed.success) throw new Error("Credenciales inválidas");
 
-        const { email, password } = parsed.data;
+        const { email, password: parsedPassword } = parsed.data;
 
         const user = await prisma.users.findUnique({
           where: { email: email.toLowerCase() },
@@ -48,10 +48,14 @@ export const authOptions: NextAuthOptions = {
 
         if (!user) throw new Error("El usuario no existe");
 
-        const passwordMatch = bcryptjs.compareSync(password, user.password);
+        const passwordMatch = bcryptjs.compareSync(
+          parsedPassword,
+          user.password
+        );
         if (!passwordMatch) throw new Error("Contraseña incorrecta");
 
-        const { password: _, ...userSafe } = user;
+        // Removemos manualmente la contraseña del usuario
+        const { password: _ignored, ...userSafe } = user;
 
         return {
           id: userSafe.id.toString(),

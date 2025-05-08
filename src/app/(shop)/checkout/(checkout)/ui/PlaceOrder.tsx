@@ -35,15 +35,7 @@ export const PlaceOrder = () => {
       quantity: p.quantity,
     }));
 
-    const resp = await placeOrder(productsToOrder, {
-      address: "UCC Montería",
-      city: "Montería",
-      country: "CO",
-      postalCode: "00000",
-      firstName: session?.user?.name || "",
-      lastName: "",
-      phone: "",
-    });
+    const resp = await placeOrder(productsToOrder);
 
     if (!resp.ok) {
       setErrorMessagge(resp.message ?? "Ocurrió un error inesperado");

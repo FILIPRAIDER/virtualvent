@@ -9,20 +9,17 @@ interface ProductToOrder {
   quantity: number;
 }
 
-interface Address {
-  address: string;
-  city: string;
-  country: string;
-  postalCode: string;
-  firstName: string;
-  lastName: string;
-  phone: string;
-}
+// interface Address {
+//   address: string;
+//   city: string;
+//   country: string;
+//   postalCode: string;
+//   firstName: string;
+//   lastName: string;
+//   phone: string;
+// }
 
-export const placeOrder = async (
-  products: ProductToOrder[],
-  address: Address
-) => {
+export const placeOrder = async (products: ProductToOrder[]) => {
   const session = await getServerSession(authOptions);
   const userId = session?.user?.id;
 

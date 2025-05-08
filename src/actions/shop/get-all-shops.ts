@@ -2,19 +2,18 @@
 
 import { prisma } from "@/lib/prisma";
 
-export const getAllShops = async (): Promise<{ id: string; nombre: string; logo: string | null }[]> => {
+export const getAllShops = async () => {
   const tiendas = await prisma.corporativos.findMany({
-    where: {
-      deleted_at: null,
-    },
-    orderBy: {
-      created_at: "desc",
+    select: {
+      id: true,
+      razon_social: true,
+      logo: true,
     },
   });
 
   return tiendas.map((tienda) => ({
-    id: tienda.uuid || "",
-    nombre: tienda.razon_social,
-    logo: tienda.logo
+    id: tienda.id,
+    razon_social: tienda.razon_social,
+    logo: tienda.logo ?? "/default-logo.png", // aseguramos que logo siempre sea string
   }));
 };

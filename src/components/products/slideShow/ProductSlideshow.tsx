@@ -1,6 +1,6 @@
+// components/ProductSlideShow.tsx
 "use client";
 
-import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
@@ -9,51 +9,12 @@ import "swiper/css/navigation";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 import { ProductCard } from "../../product/product-card/ProductCard";
 import { ProductoConImagen } from "@/interfaces";
-import { SkeletonProductCard } from "@/app/(shop)/ui/SkeletonProductCard";
 
-export const ProductSlideShow = () => {
-  const [productos, setProductos] = useState<ProductoConImagen[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+interface Props {
+  productos: ProductoConImagen[];
+}
 
-  useEffect(() => {
-    const fetchProductos = async () => {
-      try {
-        const res = await fetch("/api/productos");
-
-        if (!res.ok) {
-          throw new Error("Error del servidor");
-        }
-
-        const data = await res.json();
-        setProductos(data);
-      } catch (err) {
-        console.error("Error al cargar productos:", err);
-        setError(true);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProductos();
-  }, []);
-
-  if (loading) {
-    return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {Array.from({ length: 4 }).map((_, i) => (
-          <SkeletonProductCard key={i} />
-        ))}
-      </div>
-    );
-  }
-  if (error)
-    return (
-      <p className="text-center text-red-500">
-        No se pudieron cargar los productos.
-      </p>
-    );
-
+export const ProductSlideShow = ({ productos }: Props) => {
   return (
     <>
       <button className="cursor-pointer swiper-button-prev-product absolute left-4 sm:left-16 top-[50%] z-10 transform -translate-y-1/2 bg-[#575757] shadow-md rounded-full p-2 text-white">

@@ -8,40 +8,24 @@ import "swiper/css/navigation";
 import Image from "next/image";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 import { FaMapMarkerAlt } from "react-icons/fa";
-import { useEffect, useState } from "react";
-import { SkeletonStoreCard } from "@/app/(shop)/ui/SkeletonStoreCard";
 
-export const StoreSlideShow = () => {
-  const [tiendas, setTiendas] = useState<
-    { razon_social: string; logo: string }[]
-  >([]);
+interface Props {
+  tiendas: { razon_social: string; logo: string }[];
+}
 
-  useEffect(() => {
-    const fetchTiendas = async () => {
-      try {
-        const res = await fetch("/api/tiendas");
-
-        if (!res.ok) {
-          const message = await res.text();
-          console.error("Error al cargar tiendas:", message);
-          return;
-        }
-
-        const data = await res.json();
-        setTiendas(data);
-      } catch (error) {
-        console.error("Error inesperado:", error);
-      }
-    };
-
-    fetchTiendas();
-  }, []);
-
+export const StoreSlideShow = ({ tiendas }: Props) => {
   if (!tiendas.length) {
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 animate-pulse">
         {Array.from({ length: 4 }).map((_, index) => (
-          <SkeletonStoreCard key={index} />
+          <div
+            key={index}
+            className="flex justify-center w-60 sm:w-72 flex-col items-center"
+          >
+            <div className="w-full h-72 bg-gray-300 rounded-[6px]" />
+            <div className="w-32 h-4 bg-gray-300 mt-3 rounded" />
+            <div className="w-24 h-4 bg-gray-300 mt-2 rounded" />
+          </div>
         ))}
       </div>
     );

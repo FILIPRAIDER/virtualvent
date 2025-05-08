@@ -54,8 +54,8 @@ export const authOptions: NextAuthOptions = {
         );
         if (!passwordMatch) throw new Error("Contraseña incorrecta");
 
-        // Removemos manualmente la contraseña del usuario
-        const { password: _ignored, ...userSafe } = user;
+        // Eliminar la propiedad 'password' sin generar variable
+        const { password, ...userSafe } = user;
 
         return {
           id: userSafe.id.toString(),

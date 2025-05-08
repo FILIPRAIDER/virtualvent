@@ -80,7 +80,7 @@ export const StoreSlideShow = () => {
                   alt={tienda.nombre}
                   width={256}
                   height={256}
-                  className="rounded-[6px] w-full h-72 object-cover"
+                  className="rounded-[6px] w-full h-72 object-contain"
                   priority
                 />
                 <p className="text-center mt-2 text-lg font-semibold text-[#252525]">

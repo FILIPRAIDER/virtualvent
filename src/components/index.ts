@@ -1,5 +1,5 @@
 // export * from './orders/OrderStatus';
-// export * from './product/product-image/ProductImage';
+export * from "./product/product-image/ProductImage";
 export * from "./product/quantity-selector/QuantitySelector";
 export * from "./product/slideShow/ProductMobileSlideshow";
 export * from "./product/slideShow/ImagesSlideShow";

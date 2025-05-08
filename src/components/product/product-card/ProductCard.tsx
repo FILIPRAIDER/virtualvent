@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { normalizeSlug } from "@/utils"; // Asegúrate de que la función normalizeSlug esté correctamente importada
 import { currencyFormat } from "@/utils"; // Asegúrate de que la función currencyFormat esté correctamente importada
+import { useCartStore } from "@/store"; // Importa el store para manejar el carrito
 
 interface Props {
   producto: {
@@ -10,6 +11,7 @@ interface Props {
     imagenes: { imagen: string }[]; // Arreglo de objetos con propiedad 'imagen'
     precio: string;
     unidad: string;
+    stock: number;
   };
 }
 
@@ -21,6 +23,25 @@ export const ProductCard = ({ producto }: Props) => {
     producto.imagenes && producto.imagenes.length > 0
       ? producto.imagenes[0].imagen
       : "/imgs/Yuca.png"; // Ruta a una imagen por defecto si no hay imágenes
+
+  // Usamos el store de Zustand para manejar el carrito
+  const addProductToCart = useCartStore((state) => state.addProductToCart);
+
+  // Función para manejar la adición al carrito
+  const handleAddToCart = () => {
+    const cartProduct = {
+      id: producto.nombre, // Asumimos que el id es el nombre del producto (puedes usar otro campo único)
+      slug: slug,
+      title: producto.nombre,
+      price: Number(producto.precio), // Convertimos el precio a número
+      quantity: 1, // Suponemos que la cantidad es 1, pero puedes añadir un selector de cantidad si es necesario
+      image: imageUrl,
+      stock: producto.stock,
+    };
+
+    // Agregar el producto al carrito
+    addProductToCart(cartProduct);
+  };
 
   return (
     <div className="flex justify-center">
@@ -53,7 +74,10 @@ export const ProductCard = ({ producto }: Props) => {
             >
               Ver Producto
             </Link>
-            <button className="bg-[#093F51] py-1.5 px-2.5 rounded cursor-pointer">
+            <button
+              onClick={handleAddToCart} // Llamamos a la función para agregar al carrito
+              className="bg-[#093F51] py-1.5 px-2.5 rounded cursor-pointer"
+            >
               <TbShoppingCart size={24} className="text-white" />
             </button>
           </div>

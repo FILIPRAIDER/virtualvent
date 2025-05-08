@@ -29,6 +29,7 @@ export const AddToCart = ({ product }: Props) => {
       price: Number(product.precio),
       quantity: quantity,
       image: product.imagenes?.[0]?.imagen || "",
+      stock: product.stock,
     };
 
     addProductToCart(cartProduct);

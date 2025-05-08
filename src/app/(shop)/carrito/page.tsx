@@ -4,8 +4,8 @@ import { OrderSummary } from "./ui/OrderSummary";
 
 export default function CartPage() {
   return (
-    <div className="px-4 sm:px-8 md:px-20 lg:px-32 mt-10 mb-28">
-      <h1 className="text-2xl font-bold">Carrito</h1>
+    <div className="px-4 md:px-36 mt-10 mb-28">
+      <h1 className="text-3xl font-bold">Carrito</h1>
       <Link
         href="/"
         className="text-sm text-[#0F766E] mt-2 mb-6 inline-block hover:underline"

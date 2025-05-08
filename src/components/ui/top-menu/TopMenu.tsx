@@ -61,7 +61,8 @@ export const TopMenu = () => {
         </div>
       )}
 
-      <nav className="flex px-2 md:px-5 py-6 justify-between items-center w-full h-10">
+      <nav className="flex px-2 md:px-5 py-6 justify-between items-center w-full h-10 border-b border-gray-200">
+      
         {/* Rutas Menu */}
         <div className="hidden md:block text-black font-[500] text-[14px]">
           <Link

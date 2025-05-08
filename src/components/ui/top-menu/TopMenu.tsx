@@ -8,41 +8,41 @@ import {
   TbMenu2,
   TbUser,
 } from "react-icons/tb";
-import { useUiStore } from "@/store";
+import { useUiStore, useCartStore } from "@/store";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { IoClose, IoSearchOutline } from "react-icons/io5";
 import { usePathname, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { logout } from "@/lib/logout";
 import { BsBoxSeam } from "react-icons/bs";
-import { useCartStore } from "@/store"; // Importar la tienda del carrito
 
 export const TopMenu = () => {
   const { data: session } = useSession();
   const [isHovered, setIsHovered] = useState(false);
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
 
+  const [loaded, setLoaded] = useState(false); // Control de montaje en cliente
+
   const openSideMenu = useUiStore((state) => state.openSideMenu);
   const isSideMenuOpen = useUiStore((state) => state.isSideMenuOpen);
   const closeMenu = useUiStore((state) => state.closeSideMenu);
+  const totalItemsInCart = useCartStore((state) => state.getTotalItems());
+
   const pathname = usePathname();
   const router = useRouter();
 
-  // Obtener el total de productos en el carrito
-  const totalItemsInCart = useCartStore((state) => state.getTotalItems());
+  useEffect(() => {
+    setLoaded(true); // Solo después de montar en cliente
+  }, []);
 
   const handleMouseEnter = () => {
-    if (timeoutId) {
-      clearTimeout(timeoutId);
-    }
+    if (timeoutId) clearTimeout(timeoutId);
     setIsHovered(true);
   };
 
   const handleMouseLeave = () => {
-    const newTimeoutId = setTimeout(() => {
-      setIsHovered(false);
-    }, 200); // 200ms de retraso
+    const newTimeoutId = setTimeout(() => setIsHovered(false), 200);
     setTimeoutId(newTimeoutId);
   };
 
@@ -82,7 +82,7 @@ export const TopMenu = () => {
         </div>
 
         {/* Logo */}
-        <Link href="/" className="flex text-black font-[500] text-[16px] ">
+        <Link href="/" className="flex text-black font-[500] text-[16px]">
           <Image
             src="/LogoVirtualVent.svg"
             width={300}
@@ -93,17 +93,19 @@ export const TopMenu = () => {
           />
         </Link>
 
-        {/* Search, Cart, Menu */}
+        {/* Search + Cart + Menú */}
         <div className="items-center text-[#575757] flex">
+          {/* Buscador */}
           <div className="hidden sm:block relative items-center mr-4">
             <input
-              className="border text-[12px] font-light p-2 w-[200px] sm:w-[280px] font-n rounded-[4px] transition-al border-[#575757]/80 h-7"
+              className="border text-[12px] font-light p-2 w-[200px] sm:w-[280px] font-n rounded-[4px] border-[#575757]/80 h-7"
               placeholder="Buscar"
               type="text"
             />
             <IoSearchOutline className="absolute right-2 top-[20%]" />
           </div>
-          {/* Icons */}
+
+          {/* Carrito */}
           <div className="flex gap-1">
             <Link href="/carrito">
               <div className="relative">
@@ -111,14 +113,15 @@ export const TopMenu = () => {
                   size={24}
                   className="mx-2 cursor-pointer"
                 />
-                {/* Mostrar el número de productos en el carrito */}
-                {totalItemsInCart > 0 && (
-                  <span className="absolute top-0 right-0 text-xs rounded-full bg-blue-700 text-white px-1">
+                {loaded && totalItemsInCart > 0 && (
+                  <span className="absolute top-0 right-0 text-xs text-center rounded-full bg-blue-700 text-white px-1">
                     {totalItemsInCart}
                   </span>
                 )}
               </div>
             </Link>
+
+            {/* Menú móvil */}
             <div className="relative w-6 h-6 md:hidden">
               <TbMenu2
                 size={24}
@@ -141,7 +144,7 @@ export const TopMenu = () => {
             </div>
           </div>
 
-          {/* User Icon and Dropdown */}
+          {/* Usuario */}
           <TbBellFilled
             size={24}
             className="cursor-pointer mr-2 hidden md:block"
@@ -161,7 +164,7 @@ export const TopMenu = () => {
                 {session ? (
                   <>
                     <Link
-                      href="perfil"
+                      href="/perfil"
                       onClick={() => handleNavigation("/perfil")}
                       className="flex items-center py-2 text-sm text-gray-700 hover:bg-gray-100 px-4"
                     >
@@ -179,7 +182,7 @@ export const TopMenu = () => {
                     <button
                       onClick={() => {
                         logout();
-                        handleNavigation("/"); // Redirect after logout
+                        handleNavigation("/");
                       }}
                       className="flex items-center py-2 text-sm text-gray-700 hover:bg-gray-100 px-4 w-full text-left"
                     >
@@ -188,16 +191,14 @@ export const TopMenu = () => {
                     </button>
                   </>
                 ) : (
-                  <>
-                    <Link
-                      href="/auth/login"
-                      onClick={() => handleNavigation("/auth/login")}
-                      className="flex items-center py-2 text-sm text-gray-700 hover:bg-gray-100 px-4"
-                    >
-                      <TbUserCircle size={20} className="mr-2" />
-                      Iniciar Sesión
-                    </Link>
-                  </>
+                  <Link
+                    href="/auth/login"
+                    onClick={() => handleNavigation("/auth/login")}
+                    className="flex items-center py-2 text-sm text-gray-700 hover:bg-gray-100 px-4"
+                  >
+                    <TbUserCircle size={20} className="mr-2" />
+                    Iniciar Sesión
+                  </Link>
                 )}
               </div>
             )}

@@ -8,31 +8,28 @@ import "swiper/css/navigation";
 import Image from "next/image";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 import { FaMapMarkerAlt } from "react-icons/fa";
-
-const tiendas = [
-  {
-    nombre: "El Rincón del Campo",
-    imagen: "/imgs/tienda.png",
-  },
-  {
-    nombre: "Campo Vivo",
-    imagen: "/imgs/tienda.png",
-  },
-  {
-    nombre: "Sabor Natural",
-    imagen: "/imgs/tienda.png",
-  },
-  {
-    nombre: "Carnes del Llano",
-    imagen: "/imgs/tienda.png",
-  },
-  {
-    nombre: "Quesos La Pradera",
-    imagen: "/imgs/tienda.png",
-  },
-];
+import { getAllShops } from "@/actions/shop/get-all-shops";
+import { useEffect, useState } from "react";
 
 export const StoreSlideShow = () => {
+  const [tiendas, setTiendas] = useState<{ nombre: string; imagen: string }[]>(
+    []
+  );
+
+  useEffect(() => {
+    const fetchTiendas = async () => {
+      const shops = await getAllShops();
+      setTiendas(
+        shops.map((shop) => ({
+          nombre: shop.nombre,
+          imagen: shop.logo || "", // Provide a fallback if logo is null
+        }))
+      );
+    };
+
+    fetchTiendas();
+  }, []);
+
   return (
     <section className="px-4 sm:px-8 lg:px-24 py-8 relative">
       {/* Título */}
@@ -83,7 +80,7 @@ export const StoreSlideShow = () => {
                   alt={tienda.nombre}
                   width={256}
                   height={256}
-                  className="rounded-[6px] w-full h-72 object-cover"
+                  className="rounded-[6px] w-full h-72 object-contain"
                   priority
                 />
                 <p className="text-center mt-2 text-lg font-semibold text-[#252525]">

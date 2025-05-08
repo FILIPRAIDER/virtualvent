@@ -58,7 +58,7 @@ export const ProductsInCart = () => {
                 </span>
                 <button
                   onClick={() => removeProduct(product.id)}
-                  className="text-red-500 hover:text-red-700"
+                  className="text-red-500 hover:text-red-700 cursor-pointer"
                 >
                   <TbTrash size={18} />
                 </button>

@@ -62,7 +62,6 @@ export const TopMenu = () => {
       )}
 
       <nav className="flex px-2 md:px-5 py-6 justify-between items-center w-full h-10 border-b border-gray-200">
-      
         {/* Rutas Menu */}
         <div className="hidden md:block text-black font-[500] text-[14px]">
           <Link
@@ -173,7 +172,7 @@ export const TopMenu = () => {
                       Perfil
                     </Link>
                     <Link
-                      href="/mis-pedidos"
+                      href="/ordenes"
                       onClick={() => handleNavigation("/mis-pedidos")}
                       className="flex items-center py-2 text-sm text-gray-700 hover:bg-gray-100 px-4"
                     >

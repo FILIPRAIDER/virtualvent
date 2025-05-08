@@ -13,7 +13,7 @@ export const OrderSummary = () => {
 
   useEffect(() => {
     if (isClient && cart.length === 0) {
-      redirect("/empty");
+      redirect("/");
     }
   }, [isClient, cart]);
 

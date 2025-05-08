@@ -54,8 +54,8 @@ export const authOptions: NextAuthOptions = {
         );
         if (!passwordMatch) throw new Error("Contraseña incorrecta");
 
-        // Eliminar la propiedad 'password' sin generar variable
-        const { password, ...userSafe } = user;
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { password: _, ...userSafe } = user;
 
         return {
           id: userSafe.id.toString(),

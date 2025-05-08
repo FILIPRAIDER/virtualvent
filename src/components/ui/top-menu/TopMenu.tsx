@@ -12,28 +12,29 @@ import { useUiStore } from "@/store";
 import Link from "next/link";
 import { useState } from "react";
 import { IoClose, IoSearchOutline } from "react-icons/io5";
-import { usePathname, useRouter } from "next/navigation"; // Importing useRouter for handling redirections
+import { usePathname, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { logout } from "@/lib/logout";
 import { BsBoxSeam } from "react-icons/bs";
+import { useCartStore } from "@/store"; // Importar la tienda del carrito
 
 export const TopMenu = () => {
   const { data: session } = useSession();
   const [isHovered, setIsHovered] = useState(false);
-
-  // Define the timeoutId as NodeJS.Timeout | null to avoid type errors
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
 
   const openSideMenu = useUiStore((state) => state.openSideMenu);
   const isSideMenuOpen = useUiStore((state) => state.isSideMenuOpen);
   const closeMenu = useUiStore((state) => state.closeSideMenu);
   const pathname = usePathname();
+  const router = useRouter();
 
-  const router = useRouter(); // Using useRouter to handle the navigation and close the dropdown
+  // Obtener el total de productos en el carrito
+  const totalItemsInCart = useCartStore((state) => state.getTotalItems());
 
   const handleMouseEnter = () => {
     if (timeoutId) {
-      clearTimeout(timeoutId); // Clear previous timeout if exists
+      clearTimeout(timeoutId);
     }
     setIsHovered(true);
   };
@@ -41,13 +42,13 @@ export const TopMenu = () => {
   const handleMouseLeave = () => {
     const newTimeoutId = setTimeout(() => {
       setIsHovered(false);
-    }, 200); // 200ms delay
-    setTimeoutId(newTimeoutId); // Save the new timeoutId
+    }, 200); // 200ms de retraso
+    setTimeoutId(newTimeoutId);
   };
 
   const handleNavigation = (url: string) => {
-    setIsHovered(false); // Close the dropdown when navigating
-    router.push(url); // Perform the navigation
+    setIsHovered(false);
+    router.push(url);
   };
 
   return (
@@ -105,7 +106,18 @@ export const TopMenu = () => {
           {/* Icons */}
           <div className="flex gap-1">
             <Link href="/carrito">
-              <TbShoppingCartFilled size={24} className="mx-2 cursor-pointer" />
+              <div className="relative">
+                <TbShoppingCartFilled
+                  size={24}
+                  className="mx-2 cursor-pointer"
+                />
+                {/* Mostrar el número de productos en el carrito */}
+                {totalItemsInCart > 0 && (
+                  <span className="absolute top-0 right-0 text-xs rounded-full bg-blue-700 text-white px-1">
+                    {totalItemsInCart}
+                  </span>
+                )}
+              </div>
             </Link>
             <div className="relative w-6 h-6 md:hidden">
               <TbMenu2
@@ -136,18 +148,15 @@ export const TopMenu = () => {
           />
           <div
             className="items-center gap-2 mr-2 hidden sm:flex relative group"
-            onMouseEnter={handleMouseEnter} // Using the new handleMouseEnter
-            onMouseLeave={handleMouseLeave} // Using the new handleMouseLeave
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
           >
-            {/* Todo: desagrupar iconos */}
             <TbUserCircle size={24} className="cursor-pointer" />
-
-            {/* Dropdown for user */}
             {isHovered && (
               <div
                 className="absolute top-full -right-4 bg-white shadow-lg rounded-b-md p-2 mt-2 w-48 z-50 transition-all duration-300 ease-in-out transform scale-95 opacity-0 group-hover:scale-100 group-hover:opacity-100"
-                onMouseEnter={handleMouseEnter} // Keep open when hovering the dropdown
-                onMouseLeave={handleMouseLeave} // Close after the delay when leaving the dropdown
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
               >
                 {session ? (
                   <>

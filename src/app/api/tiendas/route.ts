@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 export async function GET() {
   try {
     const tiendas = await prisma.corporativos.findMany({
-      select: { nombre: true, logo: true },
+      select: { razon_social: true, logo: true },
     });
 
     return NextResponse.json(tiendas);

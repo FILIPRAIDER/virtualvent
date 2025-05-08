@@ -12,8 +12,11 @@ export const getProductBySlug = async (
 
     if (!p) return null;
 
+    if (!p.uuid) throw new Error("El producto no tiene UUID");
+
     return {
       ...p,
+      uuid: p.uuid, // ahora garantizado que es string
       id: p.id.toString(), // bigint → string
       precio: Number(p.precio), // Decimal → number
     };
@@ -21,7 +24,6 @@ export const getProductBySlug = async (
     console.error("Error al obtener el producto:", error);
     return null;
   } finally {
-    // Asegúrate de desconectar después de la consulta
     await prisma.$disconnect();
   }
 };

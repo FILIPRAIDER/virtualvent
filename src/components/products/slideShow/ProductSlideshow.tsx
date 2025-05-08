@@ -9,6 +9,7 @@ import "swiper/css/navigation";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 import { ProductCard } from "../../product/product-card/ProductCard";
 import { ProductoConImagen } from "@/interfaces";
+import { SkeletonProductCard } from "@/app/(shop)/ui/SkeletonProductCard";
 
 export const ProductSlideShow = () => {
   const [productos, setProductos] = useState<ProductoConImagen[]>([]);
@@ -21,10 +22,7 @@ export const ProductSlideShow = () => {
         const res = await fetch("/api/productos");
 
         if (!res.ok) {
-          const message = await res.text();
-          console.error("Error del servidor:", message);
-          setError(true);
-          return;
+          throw new Error("Error del servidor");
         }
 
         const data = await res.json();
@@ -40,7 +38,15 @@ export const ProductSlideShow = () => {
     fetchProductos();
   }, []);
 
-  if (loading) return <p className="text-center">Cargando productos...</p>;
+  if (loading) {
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <SkeletonProductCard key={i} />
+        ))}
+      </div>
+    );
+  }
   if (error)
     return (
       <p className="text-center text-red-500">
@@ -49,14 +55,7 @@ export const ProductSlideShow = () => {
     );
 
   return (
-    <section className="px-4 sm:px-8 lg:px-24 py-8 relative">
-      <div className="flex flex-col md:flex-row justify-between md:items-center gap-2 mb-8">
-        <h2 className="text-3xl font-bold">Lista de Productos</h2>
-        <a href="/productos" className="text-md md:text-sm text-[#093F51]">
-          Ver todos los productos →
-        </a>
-      </div>
-
+    <>
       <button className="cursor-pointer swiper-button-prev-product absolute left-4 sm:left-16 top-[50%] z-10 transform -translate-y-1/2 bg-[#575757] shadow-md rounded-full p-2 text-white">
         <IoChevronBack size={24} />
       </button>
@@ -86,6 +85,6 @@ export const ProductSlideShow = () => {
           </SwiperSlide>
         ))}
       </Swiper>
-    </section>
+    </>
   );
 };

@@ -2,6 +2,15 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
+// Función para serializar BigInt y otros posibles valores no serializables
+function serialize(obj: any): any {
+  return JSON.parse(
+    JSON.stringify(obj, (_, value) =>
+      typeof value === "bigint" ? value.toString() : value
+    )
+  );
+}
+
 export async function GET() {
   try {
     const productos = await prisma.productos.findMany({
@@ -12,15 +21,13 @@ export async function GET() {
         },
       },
       orderBy: { created_at: "desc" },
-      take: 20, // ✅ limita los resultados
+      take: 20,
     });
 
-    return NextResponse.json(productos);
+    // Aplicamos la función serialize para convertir BigInt a string
+    return NextResponse.json(serialize(productos));
   } catch (error) {
-    console.error("Error en /api/productos:", error);
-    return new NextResponse(JSON.stringify({ error: "Error del servidor" }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
-    });
+    console.error("Error al obtener productos:", error);
+    return NextResponse.json({ error: "Error del servidor" }, { status: 500 });
   }
 }

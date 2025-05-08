@@ -9,11 +9,12 @@ import Image from "next/image";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { useEffect, useState } from "react";
+import { SkeletonStoreCard } from "@/app/(shop)/ui/SkeletonStoreCard";
 
 export const StoreSlideShow = () => {
-  const [tiendas, setTiendas] = useState<{ nombre: string; logo: string }[]>(
-    []
-  );
+  const [tiendas, setTiendas] = useState<
+    { razon_social: string; logo: string }[]
+  >([]);
 
   useEffect(() => {
     const fetchTiendas = async () => {
@@ -36,15 +37,18 @@ export const StoreSlideShow = () => {
     fetchTiendas();
   }, []);
 
-  return (
-    <section className="px-4 sm:px-8 lg:px-24 py-8 relative">
-      <div className="flex flex-col md:flex-row justify-between md:items-center gap-2 mb-8">
-        <h2 className="text-2xl sm:text-3xl font-bold">Tiendas Oficiales</h2>
-        <a href="/tiendas" className="text-sm md:text-sm text-[#093F51]">
-          Ver todas las tiendas →
-        </a>
+  if (!tiendas.length) {
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {Array.from({ length: 4 }).map((_, index) => (
+          <SkeletonStoreCard key={index} />
+        ))}
       </div>
+    );
+  }
 
+  return (
+    <>
       <button className="swiper-button-prev-store absolute left-4 sm:left-16 top-[50%] z-10 transform -translate-y-1/2 bg-[#575757] shadow-md rounded-full p-2 text-white">
         <IoChevronBack size={24} />
       </button>
@@ -74,14 +78,14 @@ export const StoreSlideShow = () => {
               <div className="w-60 sm:w-72">
                 <Image
                   src={tienda.logo || "/default-logo.png"}
-                  alt={tienda.nombre}
+                  alt={tienda.razon_social}
                   width={256}
                   height={256}
                   className="rounded-[6px] w-full h-72 object-contain"
                   priority
                 />
                 <p className="text-center mt-2 text-lg font-semibold text-[#252525]">
-                  {tienda.nombre}
+                  {tienda.razon_social}
                 </p>
                 <p className="text-center text-sm text-[#093F51] flex items-center justify-center gap-1">
                   Ver ubicación <FaMapMarkerAlt />
@@ -91,6 +95,6 @@ export const StoreSlideShow = () => {
           </SwiperSlide>
         ))}
       </Swiper>
-    </section>
+    </>
   );
 };

@@ -72,3 +72,7 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
 };
+
+import { getServerSession } from "next-auth";
+
+export const auth = () => getServerSession(authOptions);

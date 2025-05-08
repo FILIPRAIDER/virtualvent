@@ -42,7 +42,6 @@ export const ProductsInCart = () => {
             >
               {product.title}
             </Link>
-            <span className="text-xs text-gray-500">{product.id}</span>
 
             <div className="mt-2 flex items-center justify-between gap-3">
               <QuantitySelector

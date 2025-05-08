@@ -67,17 +67,31 @@ export interface ProductoSlideShow {
 
 export interface ProductImage {
   id: string;
-  imagen: string; // URL
+  imagen: string;
   productoId: string;
 }
 
 export interface CartProduct {
-  id: string; // Puedes igualarlo a uuid
-  uuid: string; // ✅ Este campo debe estar definido al agregar al carrito
+  id: string;
+  uuid: string;
   slug: string;
   title: string;
   price: number;
   stock: number;
   quantity: number;
   image: string;
+}
+
+export interface Cliente {
+  id: string;
+  uuid: string;
+  primer_nombre: string;
+  segundo_nombre?: string;
+  primer_apellido: string;
+  segundo_apellido?: string;
+  tipo_documento: string;
+  numero_documento: string;
+  telefono: string;
+  sexo: string;
+  fecha_nacimiento: string; // usar formato ISO
 }

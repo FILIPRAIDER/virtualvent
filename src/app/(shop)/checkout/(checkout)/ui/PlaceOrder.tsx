@@ -1,21 +1,25 @@
+// src/components/ui/PlaceOrder.tsx
 "use client";
 
-import { currencyFormat } from "@/utils";
 import { useCartStore } from "@/store";
-import { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
-import clsx from "clsx";
-import { useRouter } from "next/navigation";
+import { currencyFormat } from "@/utils";
 import { placeOrder } from "@/actions";
+import { getClienteByUserId } from "@/actions/cliente/get-cliente-by-user-id";
+
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
+import clsx from "clsx";
 import { useShallow } from "zustand/react/shallow";
 
 export const PlaceOrder = () => {
   const { data: session } = useSession();
   const router = useRouter();
 
+  const [cliente, setCliente] = useState<any>(null);
   const [loaded, setLoaded] = useState(false);
-  const [errorMessagge, setErrorMessagge] = useState("");
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
+  const [errorMessagge, setErrorMessagge] = useState("");
 
   const { total, itemsInCart } = useCartStore(
     useShallow((state) => state.getSummaryInformation())
@@ -26,6 +30,7 @@ export const PlaceOrder = () => {
 
   useEffect(() => {
     setLoaded(true);
+    getClienteByUserId().then((data) => setCliente(data));
   }, []);
 
   const onPlaceOrder = async () => {
@@ -38,22 +43,20 @@ export const PlaceOrder = () => {
 
     const resp = await placeOrder(productsToOrder);
 
-    if (!resp.ok) {
+    if (!resp.ok || !resp.order) {
       setErrorMessagge(resp.message ?? "Ocurrió un error inesperado");
       setIsPlacingOrder(false);
       return;
     }
 
     clearCart();
-    if (resp.order) {
-      router.replace("/ordenes/" + resp.order.uuid);
-    }
+    router.replace("/ordenes/" + resp.order.uuid);
   };
 
   if (!loaded) return <p>Cargando...</p>;
 
   return (
-    <div className="bg-white rounded-xl shadow-xl p-7 h-fit w-full max-w-[400px]">
+    <div className="bg-white rounded-xl  p-7 h-fit w-full max-w-[400px]">
       <h2 className="text-lg mb-2 font-semibold">Resumen del Carrito</h2>
 
       <div className="grid grid-cols-2 text-sm">
@@ -90,10 +93,22 @@ export const PlaceOrder = () => {
         )}
       </div>
 
-      <div className="text-sm mt-6">
-        <h3 className="font-semibold mb-1">Detalles de la persona</h3>
+      <div className="text-sm mt-6 space-y-1">
+        <h3 className="font-semibold mb-1">Datos del cliente</h3>
         <p>
-          <strong>Nombre:</strong> {session?.user?.name}
+          <strong>Nombre completo:</strong>{" "}
+          {cliente
+            ? `${cliente.primer_nombre} ${cliente.segundo_nombre ?? ""} ${
+                cliente.primer_apellido
+              } ${cliente.segundo_apellido ?? ""}`
+            : "Cargando..."}
+        </p>
+        <p>
+          <strong>Documento:</strong>{" "}
+          {cliente?.numero_documento ?? "Cargando..."}
+        </p>
+        <p>
+          <strong>Teléfono:</strong> {cliente?.telefono ?? "Cargando..."}
         </p>
         <p>
           <strong>Correo:</strong> {session?.user?.email}

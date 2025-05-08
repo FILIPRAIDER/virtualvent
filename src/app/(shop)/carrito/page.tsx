@@ -20,13 +20,13 @@ export default function CartPage() {
         </div>
 
         {/* Resumen del carrito */}
-        <div className="bg-white rounded-xl shadow-md p-6 h-fit">
+        <div className="bg-white rounded-xl p-6 h-fit">
           <h2 className="text-lg font-semibold mb-4">Resumen del Carrito</h2>
 
           <OrderSummary />
 
           <Link
-            href="/checkout"
+            href="/checkout/datos"
             className="block w-full bg-[#093F51] text-white py-2 rounded mt-5 text-sm text-center"
           >
             Checkout

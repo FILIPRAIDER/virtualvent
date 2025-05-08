@@ -29,16 +29,15 @@ export const registerUser = async (
       };
     }
 
-    // Hashear la contraseña
     const hashedPassword = bcryptjs.hashSync(password, 10);
 
-    // Crear el usuario
     const user = await prisma.users.create({
       data: {
         name,
         email: email.toLowerCase(),
         password: hashedPassword,
-        created_at: new Date(), // opcional si tu DB no lo autogenera
+        tipousuario_id: 3,
+        created_at: new Date(),
       },
       select: {
         id: true,
@@ -51,18 +50,16 @@ export const registerUser = async (
       ok: true,
       user: {
         ...user,
-        id: user.id.toString(), // convertir BigInt a string para frontend
+        id: user.id.toString(),
       },
       message: "Usuario creado correctamente",
     };
   } catch (error) {
     console.error("[REGISTER_USER_ERROR]", error);
 
-    // Verificar si el error es una instancia de PrismaError
     if (error instanceof Error && (error as PrismaError).code) {
       const prismaError = error as PrismaError;
 
-      // Manejo específico de errores únicos de Prisma
       if (
         prismaError.code === "P2002" &&
         prismaError.meta?.target?.includes("email")
@@ -72,11 +69,6 @@ export const registerUser = async (
           message: "El correo ya está registrado.",
         };
       }
-
-      return {
-        ok: false,
-        message: "Error al registrar el usuario.",
-      };
     }
 
     return {

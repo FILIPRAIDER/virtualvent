@@ -4,6 +4,7 @@ import { QuantitySelector } from "@/components";
 import { CartProduct, ProductoClient } from "@/interfaces";
 import { useCartStore } from "@/store";
 import { useState } from "react";
+import { useRouter } from "next/navigation"; // ✅ Importa useRouter
 
 interface Props {
   product: ProductoClient;
@@ -11,6 +12,7 @@ interface Props {
 
 export const AddToCart = ({ product }: Props) => {
   const addProductToCart = useCartStore((state) => state.addProductToCart);
+  const router = useRouter(); // ✅ Hook de navegación
 
   const [quantity, setQuantity] = useState<number>(1);
   const [posted, setPosted] = useState(false);
@@ -19,7 +21,7 @@ export const AddToCart = ({ product }: Props) => {
     setPosted(true);
     if (quantity <= 0 || quantity > product.stock) {
       setPosted(false);
-      return; // No agregar al carrito si la cantidad no es válida
+      return;
     }
 
     const cartProduct: CartProduct = {
@@ -35,7 +37,12 @@ export const AddToCart = ({ product }: Props) => {
 
     addProductToCart(cartProduct);
     setPosted(false);
-    setQuantity(1); // Reseteamos la cantidad después de agregar al carrito
+    setQuantity(1);
+  };
+
+  const buyNow = () => {
+    addToCart();
+    router.push("/carrito");
   };
 
   return (
@@ -57,7 +64,10 @@ export const AddToCart = ({ product }: Props) => {
         stock={product.stock}
       />
       <div className="flex flex-col items-center justify-center mt-10 gap-4">
-        <button className="bg-[#093F51] text-white w-full rounded h-12 cursor-pointer">
+        <button
+          onClick={buyNow}
+          className="bg-[#093F51] text-white w-full rounded h-12 cursor-pointer"
+        >
           Comprar ahora
         </button>
         <button

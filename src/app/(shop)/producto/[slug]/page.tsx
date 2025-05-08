@@ -54,9 +54,10 @@ export default async function ProductPage({ params }: Props) {
     <>
       <Link
         href="/"
-        className="flex items-center text-[#093F51] my-4 px-3 md:px-40"
+        className="flex items-center text-[#093F51] my-4 px-3 ml-32 w-fit"
       >
-        <IoArrowBack size={24} className="mr-2" /> Volver atrás
+        <IoArrowBack size={24} className="mr-2" />
+        <span className="w-full">Volver atrás</span>
       </Link>
       <div className="mt-5 mb-20 grid grid-cols-1 md:grid-cols-3 gap-3 md:w-[80%] mx-auto ">
         {/* Enlace para volver atrás con icono */}

@@ -41,6 +41,7 @@ export interface producto {
 // interfaces/producto-client.ts
 export interface ProductoClient {
   id: string;
+  uuid: string;
   nombre: string;
   descripcion: string;
   stock: number;

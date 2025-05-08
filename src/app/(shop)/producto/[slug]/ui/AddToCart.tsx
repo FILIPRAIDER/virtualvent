@@ -24,6 +24,7 @@ export const AddToCart = ({ product }: Props) => {
 
     const cartProduct: CartProduct = {
       id: product.id.toString(),
+      uuid: product.uuid,
       slug: product.nombre.toLowerCase().replace(/\s+/g, "-"),
       title: product.nombre,
       price: Number(product.precio),

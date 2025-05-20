@@ -53,13 +53,13 @@ export const TopMenu = () => {
 
   return (
     <>
-      {pathname === "/" && (
+      {/* {pathname === "/" && (
         <div className="bg-[#093f51] py-0.5">
           <p className="font-semibold text-center text-white text-sm">
             Regalos por compras superiores a 100,000 cop
           </p>
         </div>
-      )}
+      )} */}
 
       <nav className="flex px-2 md:px-5 py-6 justify-between items-center w-full h-10 border-b border-gray-200">
         {/* Rutas Menu */}

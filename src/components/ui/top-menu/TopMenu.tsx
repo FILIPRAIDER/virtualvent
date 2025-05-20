@@ -12,7 +12,7 @@ import { useUiStore, useCartStore } from "@/store";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { IoClose, IoSearchOutline } from "react-icons/io5";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { logout } from "@/lib/logout";
 import { BsBoxSeam } from "react-icons/bs";
@@ -29,7 +29,6 @@ export const TopMenu = () => {
   const closeMenu = useUiStore((state) => state.closeSideMenu);
   const totalItemsInCart = useCartStore((state) => state.getTotalItems());
 
-  const pathname = usePathname();
   const router = useRouter();
 
   useEffect(() => {

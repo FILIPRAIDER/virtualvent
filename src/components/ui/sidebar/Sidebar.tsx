@@ -16,12 +16,10 @@ import {
   TbUser,
   TbUserScan,
 } from "react-icons/tb";
-import { usePathname } from "next/navigation";
 
 export const Sidebar = () => {
   const isSideMenuOpen = useUiStore((state) => state.isSideMenuOpen);
   const closeMenu = useUiStore((state) => state.closeSideMenu);
-  const pathname = usePathname();
   // const router = useRouter();
 
   useEffect(() => {
@@ -46,11 +44,9 @@ export const Sidebar = () => {
       {/* Sidemenu */}
       <nav
         className={clsx(
-          "fixed p-5 right-0 w-full h-screen bg-[#F4F4F4] z-40 shadow-2xl transform transition-all duration-300",
+          "fixed p-5 right-0 w-full h-screen top-12 bg-[#F4F4F4] z-40 shadow-2xl transform transition-all duration-300",
           {
             "translate-x-0": isSideMenuOpen,
-            "top-18": pathname === "/",
-            "top-12": pathname !== "/",
             "translate-x-full": !isSideMenuOpen,
           }
         )}

@@ -1,17 +1,58 @@
-import { getOrderById } from "@/actions";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/auth.config";
+import { redirect } from "next/navigation";
 import Image from "next/image";
 import { currencyFormat } from "@/utils";
-import { redirect } from "next/navigation";
+
+import { getOrderWithClientByUuid } from "@/actions/cliente/getOrderWithClientByuuid";
+
+import PagoWrapper from "./PagoWrapper";
 
 interface Props {
   params: Promise<{ uuid: string }>;
 }
 
-export default async function OrderPage({ params }: Props) {
-  const { uuid } = await params;
-  const { ok, order } = await getOrderById(uuid);
+async function getBancosPSE() {
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_EPAYCO_API_URL;
+    const res = await fetch(`${baseUrl}/bancos`);
 
-  if (!ok || !order) redirect("/");
+    if (!res.ok) throw new Error("Error al cargar bancos");
+
+    const data = await res.json();
+    return Array.isArray(data.bancos) ? data.bancos : [];
+  } catch {
+    return []; // fallback en caso de error
+  }
+}
+
+export default async function OrderPage({ params }: Props) {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.id) redirect("/login");
+
+  const { uuid } = await params;
+
+  const [{ ok, order }, bancos] = await Promise.all([
+    getOrderWithClientByUuid(uuid),
+    getBancosPSE(),
+  ]);
+
+  if (!ok || !order || !order.user.clientes) redirect("/");
+
+  const plainOrder = {
+    uuid: order.uuid,
+    total: order.total.toString(),
+    pagado: order.pagado,
+    user: {
+      email: order.user.email,
+      clientes: {
+        primer_nombre: order.user.clientes.primer_nombre,
+        primer_apellido: order.user.clientes.primer_apellido,
+        numero_documento: order.user.clientes.numero_documento,
+        telefono: order.user.clientes.telefono,
+      },
+    },
+  };
 
   return (
     <div className="flex justify-center px-6 py-10 h-screen">
@@ -55,7 +96,7 @@ export default async function OrderPage({ params }: Props) {
             </table>
           </div>
 
-          {/* Resumen */}
+          {/* Resumen + banco + botón */}
           <div className="bg-white rounded shadow p-6 text-sm w-full">
             <h2 className="text-lg font-semibold mb-2">Resumen del Carrito</h2>
             <div className="grid grid-cols-2 gap-y-1">
@@ -84,6 +125,10 @@ export default async function OrderPage({ params }: Props) {
                 {order.pagado ? "Pagado" : "Pendiente"}
               </span>
             </div>
+
+            {!order.pagado && (
+              <PagoWrapper order={plainOrder} bancos={bancos} />
+            )}
           </div>
         </div>
       </div>

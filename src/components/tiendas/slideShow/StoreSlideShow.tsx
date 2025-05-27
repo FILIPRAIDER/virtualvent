@@ -7,7 +7,6 @@ import "swiper/css/navigation";
 
 import Image from "next/image";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
-import { FaMapMarkerAlt } from "react-icons/fa";
 
 interface Props {
   tiendas: { razon_social: string; logo: string }[];
@@ -59,7 +58,7 @@ export const StoreSlideShow = ({ tiendas }: Props) => {
         {tiendas.map((tienda, index) => (
           <SwiperSlide key={index}>
             <div className="flex justify-center">
-              <div className="w-60 sm:w-72">
+              <div className="w-60 sm:w-72 cursor-pointer">
                 <Image
                   src={tienda.logo || "/default-logo.png"}
                   alt={tienda.razon_social}
@@ -71,9 +70,9 @@ export const StoreSlideShow = ({ tiendas }: Props) => {
                 <p className="text-center mt-2 text-lg font-semibold text-[#252525]">
                   {tienda.razon_social}
                 </p>
-                <p className="text-center text-sm text-[#093F51] flex items-center justify-center gap-1">
+                {/* <p className="text-center text-sm text-[#093F51] flex items-center justify-center gap-1">
                   Ver ubicación <FaMapMarkerAlt />
-                </p>
+                </p> */}
               </div>
             </div>
           </SwiperSlide>

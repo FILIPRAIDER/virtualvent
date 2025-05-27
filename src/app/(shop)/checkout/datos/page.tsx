@@ -1,14 +1,13 @@
-// src/app/(shop)/checkout/datos/page.tsx
 import { checkCliente } from "@/actions/cliente/check-cliente";
 import { saveCliente } from "@/actions/cliente/save-cliente";
 
 export default async function DatosClientePage() {
-  const session = await checkCliente();
+  const { session } = await checkCliente();
 
   return (
     <form
       action={saveCliente}
-      className="w-full px-4 sm:px-6 md:px-0 max-w-xl mx-auto mt-14 space-y-6 mb-10"
+      className="w-full px-4 sm:px-6 md:px-0 max-w-xl mx-auto mt-14 space-y-6 mb-24"
     >
       <h1 className="text-2xl font-bold text-center">
         Información de facturación
@@ -71,7 +70,7 @@ export default async function DatosClientePage() {
             name="email"
             className="w-full border border-gray-300 rounded px-3 py-2 bg-gray-100"
             disabled
-            value={session.user.email}
+            value={session?.user.email ?? ""}
             readOnly
           />
         </div>

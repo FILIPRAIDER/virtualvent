@@ -1,7 +1,11 @@
+"use client";
+
 import Link from "next/link";
 import { TbCircleArrowDownFilled } from "react-icons/tb";
+import { useSession } from "next-auth/react";
 
 export const BannerSlide = () => {
+  const { data: session } = useSession();
   return (
     <div className="h-screen z-0 w-full bg-[url('/imgs/banner.webp')] bg-cover bt-top bg-no-repeat ">
       <div className="flex flex-col text-center">
@@ -18,17 +22,20 @@ export const BannerSlide = () => {
           </p>
         </div>
 
-        <div className="flex gap-4 mx-auto mt-4">
-          <button className="text-black bg-white rounded-[4px] p-1.5 border border-[#575757] shadow-md cursor-pointer">
+        {!session?.user && (
+          <div className="flex gap-4 mx-auto mt-4">
+            {/* <button className="text-black bg-white rounded-[4px] p-1.5 border border-[#575757] shadow-md cursor-pointer">
             Compra ya!
-          </button>
-          <Link
-            href="/auth/new-account"
-            className="text-white rounded-[4px] p-1.5 border border-[#575757] shadow-md bg-[#093f51] cursor-pointer"
-          >
-            Registrarse
-          </Link>
-        </div>
+          </button> */}
+
+            <Link
+              href="/auth/new-account"
+              className="text-white rounded-[4px] p-1.5 border border-[#575757] shadow-md bg-[#093f51] cursor-pointer"
+            >
+              Registrarse
+            </Link>
+          </div>
+        )}
 
         <div>
           <p className="bowlby text-sm font-normal uppercase text-white mt-24 tracking-[2px]">

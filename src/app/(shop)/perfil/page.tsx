@@ -3,6 +3,7 @@
 import { useSession } from "next-auth/react";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export default function ProfilePage() {
   const { data: session, status } = useSession();
@@ -34,8 +35,10 @@ export default function ProfilePage() {
         </div> */}
         <section className="flex flex-row gap-4">
           <div className="relative">
-            <img
-              className="w-24 h-16 rounded-full object-cover"
+            <Image
+              width={96} // 24 * 4 (tailwind w-24)
+              height={64} // 16 * 4 (tailwind h-16)
+              className="rounded-full object-cover"
               src={`https://ui-avatars.com/api/?name=${session?.user?.name}&background=0D8ABC&color=fff`}
               alt="Avatar"
             />

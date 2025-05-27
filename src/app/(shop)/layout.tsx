@@ -6,11 +6,16 @@ export default function ShopLayout({
   children: React.ReactNode;
 }) {
   return (
-    <main className="min-h-screen">
+    <div className="flex flex-col min-h-screen">
+      {/* Encabezado y navegación */}
       <TopMenu />
       <Sidebar />
-      <div className="px-0 ">{children}</div>
+
+      {/* Contenido principal que crece */}
+      <div className="flex-grow px-0">{children}</div>
+
+      {/* Footer al fondo */}
       <Footer />
-    </main>
+    </div>
   );
 }

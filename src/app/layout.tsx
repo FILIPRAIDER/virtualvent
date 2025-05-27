@@ -59,7 +59,7 @@ export default function RootLayout({
     >
       <body
         style={{ fontFamily: "var(--font-poppins)" }}
-        className="font-sans antialiased"
+        className="antialiased flex flex-col min-h-screen"
       >
         {/* Agregar metadatos globales */}
         <Head>

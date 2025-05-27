@@ -3,7 +3,6 @@
 import Image from "next/image";
 import {
   TbShoppingCartFilled,
-  TbBellFilled,
   TbUserCircle,
   TbMenu2,
   TbUser,
@@ -22,7 +21,7 @@ export const TopMenu = () => {
   const [isHovered, setIsHovered] = useState(false);
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
 
-  const [loaded, setLoaded] = useState(false); // Control de montaje en cliente
+  const [loaded, setLoaded] = useState(false);
 
   const openSideMenu = useUiStore((state) => state.openSideMenu);
   const isSideMenuOpen = useUiStore((state) => state.isSideMenuOpen);
@@ -69,9 +68,9 @@ export const TopMenu = () => {
           >
             Tiendas Oficiales
           </Link>
-          <Link className="p-2 rounded-md transition-all" href="/categorias">
+          {/* <Link className="p-2 rounded-md transition-all" href="/categorias">
             Categorias
-          </Link>
+          </Link> */}
           <Link
             className="p-2 rounded-md transition-all"
             href="/sobre-nosotros"
@@ -144,10 +143,10 @@ export const TopMenu = () => {
           </div>
 
           {/* Usuario */}
-          <TbBellFilled
+          {/* <TbBellFilled
             size={24}
             className="cursor-pointer mr-2 hidden md:block"
-          />
+          /> */}
           <div
             className="items-center gap-2 mr-2 hidden sm:flex relative group"
             onMouseEnter={handleMouseEnter}

@@ -53,7 +53,7 @@ export const OrderClient = ({ plainOrder }: Props) => {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center w-full h-screen">
+      <div className="flex flex-col items-center justify-center w-full h-screen -mt-20">
         <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-[#093F51] mb-4"></div>
         <p className="text-lg font-semibold">Conectando con el servidor...</p>
         <p className="text-sm text-gray-500">

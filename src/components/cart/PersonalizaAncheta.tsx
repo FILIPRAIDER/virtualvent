@@ -128,7 +128,7 @@ export const PersonalizaAncheta = ({ productos }: Props) => {
 
         <button
           onClick={handleAddAllToCart}
-          className="mt-6 w-full bg-[#093F51] text-white py-3 rounded text-sm"
+          className="mt-6 w-full bg-[#093F51] text-white py-3 rounded text-sm cursor-pointer"
         >
           Agregar ancheta al carrito
         </button>

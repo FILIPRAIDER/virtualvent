@@ -5,7 +5,7 @@ import { IoAddCircleOutline, IoRemoveCircleOutline } from "react-icons/io5";
 interface Props {
   quantity: number;
   onQuantityChanged: (quantity: number) => void;
-  stock: number; // Añadimos stock como propiedad
+  stock: number;
 }
 
 export const QuantitySelector = ({
@@ -14,10 +14,12 @@ export const QuantitySelector = ({
   stock,
 }: Props) => {
   const onValueChanged = (value: number) => {
-    if (quantity + value < 1) return; // Prevent less than 1
-    if (quantity + value > stock) return; // Prevent exceeding stock
+    const newValue = quantity + value;
 
-    onQuantityChanged(quantity + value);
+    if (newValue < 0) return; // ahora se permite hasta 0
+    if (newValue > stock) return;
+
+    onQuantityChanged(newValue);
   };
 
   return (
@@ -25,9 +27,9 @@ export const QuantitySelector = ({
       <p className="text-md font-light text-[#575757]">Cantidad:</p>
       <div className="flex items-center">
         <button
-          className="cursor-pointer"
+          className="cursor-pointer disabled:opacity-30"
           onClick={() => onValueChanged(-1)}
-          disabled={quantity <= 1} // Deshabilitar el botón si la cantidad es 1
+          disabled={quantity <= 0}
         >
           <IoRemoveCircleOutline size={30} />
         </button>
@@ -35,9 +37,9 @@ export const QuantitySelector = ({
           {quantity}
         </span>
         <button
-          className="cursor-pointer"
+          className="cursor-pointer disabled:opacity-30"
           onClick={() => onValueChanged(1)}
-          disabled={quantity >= stock} // Deshabilitar el botón si la cantidad alcanza el stock
+          disabled={quantity >= stock}
         >
           <IoAddCircleOutline size={30} />
         </button>

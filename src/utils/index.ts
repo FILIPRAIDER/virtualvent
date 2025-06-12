@@ -1,4 +1,6 @@
+export * from "./TransformSlugToTittle";
 export * from "./currencyFormat";
 export * from "./generatePaginationNumbers";
-export * from "./sleep";
 export * from "./normalizeSlug";
+export * from "./redirect";
+export * from "./sleep";

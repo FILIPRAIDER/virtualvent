@@ -309,3 +309,9 @@ model clientes {
 
   @@index([user_id], map: "clientes_user_id_foreign")
 }
+
+generator erd {
+  provider = "prisma-erd-generator"
+  output   = "./ERD.svg"
+  format   = "svg"
+}

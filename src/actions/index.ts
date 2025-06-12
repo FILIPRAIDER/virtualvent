@@ -7,3 +7,5 @@ export * from "./order/get-order-by-id";
 export * from "./order/get-order-by-user";
 export * from "./category/get-all-categories";
 export * from "./order/actualizar-orden";
+export * from "./product/get-canasta-campesina";
+export * from "./product/get-productos-sin-canasta";

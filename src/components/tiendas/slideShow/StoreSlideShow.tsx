@@ -58,21 +58,18 @@ export const StoreSlideShow = ({ tiendas }: Props) => {
         {tiendas.map((tienda, index) => (
           <SwiperSlide key={index}>
             <div className="flex justify-center">
-              <div className="w-60 sm:w-72 cursor-pointer">
+              <div className="w-60 sm:w-72">
                 <Image
                   src={tienda.logo || "/default-logo.png"}
                   alt={tienda.razon_social}
                   width={256}
                   height={256}
-                  className="rounded-[6px] w-full h-72 object-contain"
+                  className="rounded-[6px] w-full h-40 object-contain"
                   priority
                 />
-                <p className="text-center mt-2 text-lg font-semibold text-[#252525]">
+                <p className="text-center mt-2 text-sm font-medium text-[#252525] break-words leading-tight">
                   {tienda.razon_social}
                 </p>
-                {/* <p className="text-center text-sm text-[#093F51] flex items-center justify-center gap-1">
-                  Ver ubicación <FaMapMarkerAlt />
-                </p> */}
               </div>
             </div>
           </SwiperSlide>

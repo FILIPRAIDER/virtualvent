@@ -1,0 +1,4 @@
+{
+  "ignore": ["node_modules", ".git", ".next", ".vscode", "dist"],
+  "depth": 3
+}

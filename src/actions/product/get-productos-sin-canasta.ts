@@ -3,25 +3,15 @@
 import { prisma } from "@/lib/prisma";
 import { ProductoConImagen } from "@/interfaces";
 
-export const getProductos = async (): Promise<ProductoConImagen[]> => {
+export const getProductosSinCanasta = async (): Promise<
+  ProductoConImagen[]
+> => {
   const productos = await prisma.productos.findMany({
     where: {
       deleted_at: null,
       AND: [
-        {
-          nombre: {
-            not: {
-              contains: "canasta",
-            },
-          },
-        },
-        {
-          nombre: {
-            not: {
-              contains: "Canasta",
-            },
-          },
-        },
+        { nombre: { not: { contains: "canasta" } } },
+        { nombre: { not: { contains: "Canasta" } } },
       ],
     },
     include: {

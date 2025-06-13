@@ -31,6 +31,7 @@ export const OrderClient = ({ plainOrder }: Props) => {
   const [bancos, setBancos] = useState<Banco[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [pagado, setPagado] = useState(plainOrder.pagado);
 
   useEffect(() => {
     const fetchBancos = async () => {
@@ -48,8 +49,21 @@ export const OrderClient = ({ plainOrder }: Props) => {
       }
     };
 
+    const fetchEstadoActual = async () => {
+      try {
+        const res = await fetch(`/api/verificar-orden/${plainOrder.uuid}`);
+        const data = await res.json();
+        if (data?.ok && data.pagado === true) {
+          setPagado(true);
+        }
+      } catch (err) {
+        console.error("Error verificando estado de orden:", err);
+      }
+    };
+
     fetchBancos();
-  }, []);
+    fetchEstadoActual();
+  }, [plainOrder.uuid]);
 
   if (loading) {
     return (
@@ -109,21 +123,18 @@ export const OrderClient = ({ plainOrder }: Props) => {
           <div className="mt-6">
             <span
               className={`px-2 py-1 text-xs rounded font-semibold ${
-                plainOrder.pagado
+                pagado
                   ? "bg-green-100 text-green-700"
                   : "bg-yellow-100 text-yellow-700"
               }`}
             >
-              {plainOrder.pagado ? "Pagado" : "Pendiente"}
+              {pagado ? "Pagado" : "Pendiente"}
             </span>
           </div>
 
-          {!plainOrder.pagado && (
-            <PagoWrapper order={plainOrder} bancos={bancos} />
-          )}
+          {!pagado && <PagoWrapper order={plainOrder} bancos={bancos} />}
         </div>
       </div>
     </div>
   );
 };
-

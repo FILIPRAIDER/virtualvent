@@ -1,8 +1,35 @@
+"use client";
+
 import Link from "next/link";
 import { ProductsInCart } from "./ui/ProductsInCart";
 import { OrderSummary } from "./ui/OrderSummary";
+import { useCartStore } from "@/store";
+import { useRouter } from "next/navigation";
+import { useMemo } from "react";
+import Swal from "sweetalert2";
 
 export default function CartPage() {
+  const router = useRouter();
+  const cart = useCartStore((state) => state.cart);
+
+  const total = useMemo(() => {
+    return cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  }, [cart]);
+
+  const handleCheckout = () => {
+    if (total < 50000) {
+      Swal.fire({
+        icon: "warning",
+        title: "Monto insuficiente",
+        text: "La compra mínima debe ser de $50.000 COP",
+        confirmButtonColor: "#093F51",
+      });
+      return;
+    }
+
+    router.push("/checkout/datos");
+  };
+
   return (
     <div className="px-4 md:px-36 mt-10 mb-28">
       <h1 className="text-3xl font-bold">Carrito</h1>
@@ -25,12 +52,12 @@ export default function CartPage() {
 
           <OrderSummary />
 
-          <Link
-            href="/checkout/datos"
+          <button
+            onClick={handleCheckout}
             className="block w-full bg-[#093F51] text-white py-2 rounded mt-5 text-sm text-center"
           >
             Checkout
-          </Link>
+          </button>
 
           <p className="text-[11px] text-gray-600 mt-4">
             ⚠️ Importante: Por ahora, los productos se recogen únicamente en la

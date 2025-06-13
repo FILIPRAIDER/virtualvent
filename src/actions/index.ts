@@ -5,6 +5,7 @@ export * from "./product/get-all-products";
 export * from "./order/place-order";
 export * from "./order/get-order-by-id";
 export * from "./order/get-order-by-user";
+export * from "./order/get-order-status";
 export * from "./category/get-all-categories";
 export * from "./order/actualizar-orden";
 export * from "./product/get-canasta-campesina";

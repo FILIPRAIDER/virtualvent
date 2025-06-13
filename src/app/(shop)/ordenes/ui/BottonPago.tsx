@@ -49,7 +49,6 @@ export default function PagoButton({ order, bancos }: PagoButtonProps) {
       console.log("Respuesta de crearPagoPSE:", res);
 
       if (res.ok && res.url) {
-        // ✅ Redirigir al banco con la URL correcta
         window.location.href = res.url;
       } else {
         alert("No se pudo obtener URL de pago: " + "Error desconocido");

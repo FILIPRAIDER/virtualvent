@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { crearPagoPSE } from "@/actions/payments/crear-pago-pse";
+import { getIntentoPagoUuid } from "@/actions/payments/get-intento-pago-uuid"; // 👈 asegúrate de tener esta server action
 
 interface PlainOrder {
   uuid: string;
@@ -35,8 +36,15 @@ export default function PagoButton({ order, bancos }: PagoButtonProps) {
 
     setLoading(true);
     try {
+      // 1. Obtener el intento de pago más reciente
+      const intentoUuid = await getIntentoPagoUuid(order.uuid);
+      if (!intentoUuid) {
+        throw new Error("No se pudo generar el intento de pago.");
+      }
+
+      // 2. Crear pago con el UUID del intento
       const res = await crearPagoPSE({
-        uuidOrden: order.uuid,
+        extra1: intentoUuid,
         valor: String(order.total),
         email: order.user.email,
         nombre: order.user.clientes?.primer_nombre ?? "",

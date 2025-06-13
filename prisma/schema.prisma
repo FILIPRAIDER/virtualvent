@@ -230,10 +230,10 @@ model users {
   deleted_at        DateTime?      @db.Timestamp(0)
   tipousuario_id    BigInt?        @db.UnsignedBigInt
   categorias        categorias[]
-  corporativos      corporativos[]
-  tipousuarios      tipousuarios?  @relation(fields: [tipousuario_id], references: [id], onUpdate: NoAction, map: "users_tipousuario_id_foreign")
   clientes          clientes?
-  ordenes           ordenes[] // Relación inversa
+  corporativos      corporativos[]
+  ordenes           ordenes[]
+  tipousuarios      tipousuarios?  @relation(fields: [tipousuario_id], references: [id], onUpdate: NoAction, map: "users_tipousuario_id_foreign")
 
   @@index([tipousuario_id], map: "users_tipousuario_id_foreign")
 }
@@ -274,19 +274,20 @@ model item_orden {
 }
 
 model ordenes {
-  id         BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
-  uuid       String    @unique(map: "ordenes_uuid_unique") @db.Char(36)
-  total      Decimal   @db.Decimal(10, 2)
-  num_items  Int
-  pagado     Boolean   @default(false)
-  fecha_pago DateTime  @db.Date
-  created_at DateTime? @db.Timestamp(0)
-  updated_at DateTime? @db.Timestamp(0)
+  id            BigInt          @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid          String          @unique(map: "ordenes_uuid_unique") @db.Char(36)
+  total         Decimal         @db.Decimal(10, 2)
+  num_items     Int
+  pagado        Boolean         @default(false)
+  fecha_pago    DateTime        @db.Date
+  created_at    DateTime?       @db.Timestamp(0)
+  updated_at    DateTime?       @db.Timestamp(0)
+  user_id       BigInt          @db.UnsignedBigInt
+  intentos_pago intentos_pago[]
+  item_orden    item_orden[]
+  user          users           @relation(fields: [user_id], references: [id])
 
-  user_id BigInt @db.UnsignedBigInt // Nuevo campo
-  user    users  @relation(fields: [user_id], references: [id]) // Relación
-
-  item_orden item_orden[]
+  @@index([user_id], map: "ordenes_user_id_fkey")
 }
 
 model clientes {
@@ -304,8 +305,20 @@ model clientes {
   fecha_nacimiento DateTime  @db.Date
   created_at       DateTime? @db.Timestamp(0)
   updated_at       DateTime? @db.Timestamp(0)
-
-  users users @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "clientes_user_id_foreign")
+  users            users     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "clientes_user_id_foreign")
 
   @@index([user_id], map: "clientes_user_id_foreign")
+}
+
+model intentos_pago {
+  id         BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid       String    @unique(map: "uuid") @db.Char(36)
+  orden_id   BigInt    @db.UnsignedBigInt
+  pagado     Boolean?  @default(false)
+  estado     String?   @default("pendiente") @db.VarChar(50)
+  created_at DateTime? @default(now()) @db.Timestamp(0)
+  updated_at DateTime? @default(now()) @db.Timestamp(0)
+  ordenes    ordenes   @relation(fields: [orden_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_intentos_orden")
+
+  @@index([orden_id], map: "fk_intentos_orden")
 }

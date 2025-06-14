@@ -1,4 +1,3 @@
-// src/components/ui/PlaceOrder.tsx
 "use client";
 
 import { useCartStore } from "@/store";
@@ -18,7 +17,6 @@ export const PlaceOrder = () => {
   const router = useRouter();
 
   const [cliente, setCliente] = useState<Cliente | null>(null);
-
   const [loaded, setLoaded] = useState(false);
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
   const [errorMessagge, setErrorMessagge] = useState("");
@@ -29,6 +27,13 @@ export const PlaceOrder = () => {
 
   const cart = useCartStore((state) => state.cart);
   const clearCart = useCartStore((state) => state.clearCart);
+
+  // Cálculo de descuento
+  const ahora = new Date();
+  const fechaLimite = new Date("2025-06-15T00:00:00-05:00");
+  const aplicaDescuento = total >= 100000 && ahora < fechaLimite;
+  const descuento = aplicaDescuento ? total * 0.2 : 0;
+  const totalConDescuento = total - descuento;
 
   useEffect(() => {
     setLoaded(true);
@@ -76,7 +81,7 @@ export const PlaceOrder = () => {
   if (!loaded) return <p>Cargando...</p>;
 
   return (
-    <div className="bg-white rounded-xl  p-7 h-fit w-full max-w-[400px]">
+    <div className="bg-white rounded-xl p-7 h-fit w-full max-w-[400px]">
       <h2 className="text-lg mb-2 font-semibold">Resumen del Carrito</h2>
 
       <div className="grid grid-cols-2 text-sm">
@@ -86,10 +91,21 @@ export const PlaceOrder = () => {
         <span>Subtotal</span>
         <span className="text-right">{currencyFormat(total)}</span>
 
+        {aplicaDescuento && (
+          <>
+            <span className="text-green-700">Descuento 20%</span>
+            <span className="text-green-700 text-right">
+              -{currencyFormat(descuento)}
+            </span>
+          </>
+        )}
+
         <hr className="col-span-2 my-2" />
 
         <span className="font-bold">Total</span>
-        <span className="font-bold text-right">{currencyFormat(total)}</span>
+        <span className="font-bold text-right">
+          {currencyFormat(totalConDescuento)}
+        </span>
       </div>
 
       <p className="text-[11px] text-gray-600 mt-4">

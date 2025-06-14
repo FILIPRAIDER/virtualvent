@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { currencyFormat } from "@/utils";
 import PagoWrapper from "../PagoWrapper";
+import { CheckCircleIcon } from "@heroicons/react/24/solid";
 
 interface Banco {
   description: string;
@@ -87,6 +88,19 @@ export const OrderClient = ({ plainOrder }: Props) => {
 
   return (
     <div className="w-full max-w-4xl">
+      {/* ✅ Mensaje de éxito al pagar */}
+      {pagado && (
+        <div className="mb-6 p-4 bg-green-100 border border-green-300 rounded flex items-start gap-3">
+          <CheckCircleIcon className="w-6 h-6 text-green-600 mt-0.5" />
+          <div className="text-sm text-green-800">
+            <strong>¡Tu orden fue pagada exitosamente!</strong>
+            <br />
+            Estos pedidos se entregarán el{" "}
+            <strong>19 de junio de 9 a 12 del día en la UCC</strong>.
+          </div>
+        </div>
+      )}
+
       <h1 className="text-2xl font-bold mb-4">Resumen de la Orden</h1>
 
       <div className="grid sm:grid-cols-2 gap-10">

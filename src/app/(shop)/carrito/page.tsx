@@ -54,7 +54,7 @@ export default function CartPage() {
 
           <button
             onClick={handleCheckout}
-            className="block w-full bg-[#093F51] text-white py-2 rounded mt-5 text-sm text-center"
+            className="block w-full bg-[#093F51] text-white py-2 rounded mt-5 text-sm text-center cursor-pointer"
           >
             Checkout
           </button>

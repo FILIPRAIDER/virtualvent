@@ -6,6 +6,7 @@ import { QuantitySelector } from "@/components";
 import { useState, useMemo } from "react";
 import Swal from "sweetalert2";
 import { currencyFormat } from "@/utils";
+import { useRouter } from "next/navigation";
 
 interface Props {
   productos: ProductoConImagen[];
@@ -14,6 +15,7 @@ interface Props {
 export const PersonalizaAncheta = ({ productos }: Props) => {
   const addProductToCart = useCartStore((state) => state.addProductToCart);
   const [quantities, setQuantities] = useState<{ [key: string]: number }>({});
+  const router = useRouter();
 
   const handleChange = (uuid: string, quantity: number) => {
     setQuantities((prev) => ({ ...prev, [uuid]: quantity }));
@@ -64,6 +66,8 @@ export const PersonalizaAncheta = ({ productos }: Props) => {
       title: "¡Productos agregados!",
       text: "Tu ancheta personalizada se ha guardado en el carrito",
       confirmButtonColor: "#093F51",
+    }).then(() => {
+      router.push("/carrito");
     });
   };
 
@@ -75,7 +79,6 @@ export const PersonalizaAncheta = ({ productos }: Props) => {
             key={p.uuid}
             className="flex flex-row sm:flex-row items-start gap-4 border-b border-gray-300 pb-4"
           >
-            {/* Imagen a la izquierda */}
             <div className="flex flex-col items-center w-24 flex-shrink-0">
               <img
                 src={p.imagenes?.[0]?.imagen || "/default.jpg"}
@@ -86,13 +89,13 @@ export const PersonalizaAncheta = ({ productos }: Props) => {
                 {p.nombre}
                 <br />
                 <span className="text-gray-500 font-normal">({p.unidad})</span>
+                <br />
                 <span className="text-gray-500 font-normal">
                   {currencyFormat(Number(p.precio))}
                 </span>
               </p>
             </div>
 
-            {/* Selector y precio a la derecha */}
             <div className="flex ml-10 flex-col justify-between flex-1 sm:flex-row sm:items-center w-full">
               <QuantitySelector
                 quantity={quantities[p.uuid] || 0}
@@ -100,14 +103,13 @@ export const PersonalizaAncheta = ({ productos }: Props) => {
                 stock={p.stock}
               />
               <span className="text-md font-medium mt-3 sm:mt-0 sm:ml-4">
-                ${Number(p.precio) * (quantities[p.uuid] || 0)}
+                {currencyFormat(Number(p.precio) * (quantities[p.uuid] || 0))}
               </span>
             </div>
           </div>
         ))}
       </div>
 
-      {/* Resumen de la compra */}
       <div className="mt-10 bg-white border border-gray-200 rounded-xl p-6 w-full">
         <h2 className="text-lg font-semibold mb-4">Resumen de tu ancheta</h2>
         <div className="text-sm space-y-2">
@@ -117,12 +119,12 @@ export const PersonalizaAncheta = ({ productos }: Props) => {
           </div>
           <div className="flex justify-between">
             <span>Subtotal</span>
-            <span>${total}</span>
+            <span>{currencyFormat(total)}</span>
           </div>
           <hr className="my-2" />
           <div className="flex justify-between font-semibold text-base">
             <span>Total</span>
-            <span>${total}</span>
+            <span>{currencyFormat(total)}</span>
           </div>
         </div>
 

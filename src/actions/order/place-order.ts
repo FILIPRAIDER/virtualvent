@@ -18,12 +18,10 @@ export const placeOrder = async (products: ProductToOrder[]) => {
   }
 
   try {
-    // Filtramos productId válidos
     const validProductIds = products
       .map((p) => p.productId)
       .filter((id): id is string => typeof id === "string");
 
-    // Obtenemos productos válidos desde la base de datos
     const dbProducts = await prisma.productos.findMany({
       where: {
         uuid: { in: validProductIds },
@@ -36,7 +34,6 @@ export const placeOrder = async (products: ProductToOrder[]) => {
       },
     });
 
-    // Construimos los ítems a partir de los productos válidos
     const items = products.map((item) => {
       const dbProduct = dbProducts.find((p) => p.uuid === item.productId);
       if (!dbProduct) {
@@ -50,21 +47,28 @@ export const placeOrder = async (products: ProductToOrder[]) => {
       };
     });
 
-    const total = items.reduce(
+    const subtotal = items.reduce(
       (acc, item) => acc + Number(item.precio) * item.cantidad,
       0
     );
 
-    // Creamos la orden y los items en transacción
+    // ✅ Aplicar descuento si corresponde
+    const ahora = new Date();
+    const fechaLimite = new Date("2025-06-15T00:00:00-05:00");
+    const aplicaDescuento = subtotal >= 100000 && ahora < fechaLimite;
+    const totalConDescuento = aplicaDescuento
+      ? Math.round(subtotal * 0.8)
+      : subtotal;
+
     const createdOrder = await prisma.$transaction(async (tx) => {
       const orden = await tx.ordenes.create({
         data: {
           uuid: crypto.randomUUID(),
-          total,
+          total: totalConDescuento, // 👈 Total con descuento aplicado
           num_items: items.reduce((sum, i) => sum + i.cantidad, 0),
           pagado: false,
           fecha_pago: new Date(),
-          user_id: BigInt(userId), // 👈 Asegúrate que esto sea BigInt si tu modelo lo usa
+          user_id: BigInt(userId),
         },
       });
 
@@ -72,7 +76,7 @@ export const placeOrder = async (products: ProductToOrder[]) => {
         data: items.map((item) => ({
           ...item,
           orden_id: orden.id,
-          uuid: crypto.randomUUID(), // asignar uuid a cada item
+          uuid: crypto.randomUUID(),
         })),
       });
 
@@ -82,7 +86,7 @@ export const placeOrder = async (products: ProductToOrder[]) => {
     return {
       ok: true,
       order: {
-        uuid: createdOrder.uuid, // solo pasar uuid para evitar errores con BigInt/Decimal
+        uuid: createdOrder.uuid,
       },
     };
   } catch (error: unknown) {

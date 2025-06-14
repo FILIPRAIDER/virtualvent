@@ -312,7 +312,7 @@ model clientes {
 
 model intentos_pago {
   id         BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
-  uuid       String    @unique(map: "uuid") @db.Char(36)
+  uuid       String    @unique(map: "uuid") @default(dbgenerated("(uuid())")) @db.Char(36)
   orden_id   BigInt    @db.UnsignedBigInt
   pagado     Boolean?  @default(false)
   estado     String?   @default("pendiente") @db.VarChar(50)

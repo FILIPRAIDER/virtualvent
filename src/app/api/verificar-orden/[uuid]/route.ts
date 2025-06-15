@@ -8,7 +8,7 @@ export async function GET(
   const { uuid } = await params;
 
   // Buscar la orden por UUID
-  const orden = await prisma.ordenes.findUnique({
+  const orden = await prisma.ordenes.findFirst({
     where: { uuid },
     select: {
       id: true,
@@ -44,7 +44,10 @@ export async function GET(
   }
 
   // Verificar con ePayco directamente usando el UUID del intento como refPayco
-  const pagoExitoso = await verificarPagoConEpayco(intento.uuid);
+  const refPayco = intento.ref_payco || intento.uuid;
+  const pagoExitoso = await verificarPagoConEpayco(refPayco);
+
+  console.log(pagoExitoso);
 
   if (pagoExitoso) {
     await prisma.ordenes.update({

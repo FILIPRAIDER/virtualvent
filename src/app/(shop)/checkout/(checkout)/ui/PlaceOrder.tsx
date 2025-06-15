@@ -30,7 +30,7 @@ export const PlaceOrder = () => {
 
   // Cálculo de descuento
   const ahora = new Date();
-  const fechaLimite = new Date("2025-06-15T00:00:00-05:00");
+  const fechaLimite = new Date("2025-06-16T12:00:00-05:00");
   const aplicaDescuento = total >= 100000 && ahora < fechaLimite;
   const descuento = aplicaDescuento ? total * 0.2 : 0;
   const totalConDescuento = total - descuento;

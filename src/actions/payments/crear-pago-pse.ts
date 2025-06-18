@@ -1,7 +1,6 @@
-// archivo: @/actions/payments/crear-pago-pse.ts
-
 export interface CrearPagoPSEParams {
-  extra1: string; // UUID del intento de pago
+  uuidOrden: string; // <--- ahora obligatorio
+  extra1: string; // UUID del intento
   valor: string;
   nombre: string;
   apellido: string;
@@ -20,7 +19,8 @@ export async function crearPagoPSE(data: CrearPagoPSEParams) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        extra1: data.extra1, // este UUID se usa para luego hacer la actualización
+        uuidOrden: data.uuidOrden,
+        extra1: data.extra1,
         valor: data.valor,
         nombre: data.nombre,
         apellido: data.apellido,
@@ -42,8 +42,5 @@ export async function crearPagoPSE(data: CrearPagoPSEParams) {
     );
   }
 
-  return {
-    ok: true,
-    url: resJson.url,
-  };
+  return { ok: true, url: resJson.url };
 }

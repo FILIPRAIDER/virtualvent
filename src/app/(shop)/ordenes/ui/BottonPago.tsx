@@ -44,6 +44,7 @@ export default function PagoButton({ order, bancos }: PagoButtonProps) {
 
       // 2. Crear pago con el UUID del intento
       const res = await crearPagoPSE({
+        uuidOrden: order.uuid,
         extra1: intentoUuid,
         valor: String(order.total),
         email: order.user.email,
